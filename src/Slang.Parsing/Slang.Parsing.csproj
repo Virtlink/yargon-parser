@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IParseTable.cs" />
+    <Compile Include="IReduction.cs" />
+    <Compile Include="ISort.cs" />
+    <Compile Include="ISymbol.cs" />
+    <Compile Include="IToken.cs" />
+    <Compile Include="ITokenType.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
