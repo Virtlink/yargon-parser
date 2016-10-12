@@ -50,18 +50,39 @@ namespace Slang.Parser.Tests
         /// <inheritdoc />
         public bool TryGetShift(State state, ITokenType token, out State nextState)
         {
+            #region Contract
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            if (token == null)
+                throw new ArgumentNullException(nameof(token));
+            #endregion
+
             return this.gotos.TryGetValue(Tuple.Create(state, (ISymbol)token), out nextState);
         }
 
         /// <inheritdoc />
         public bool TryGetGoto(State state, ISort label, out State nextState)
         {
+            #region Contract
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            if (label == null)
+                throw new ArgumentNullException(nameof(label));
+            #endregion
+
             return this.gotos.TryGetValue(Tuple.Create(state, (ISymbol)label), out nextState);
         }
 
         /// <inheritdoc />
         public IEnumerable<IReduction> GetReductions(State state, ITokenType lookahead)
         {
+            #region Contract
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            if (lookahead == null)
+                throw new ArgumentNullException(nameof(lookahead));
+            #endregion
+
             IReadOnlyCollection<IReduction> reductionList;
             if (!this.reductions.TryGetValue(Tuple.Create(state, lookahead), out reductionList))
                 return Enumerable.Empty<IReduction>();

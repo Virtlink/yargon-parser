@@ -43,7 +43,8 @@ namespace Slang.Parsing
         bool TryGetGoto(TState state, ISort label, out TState nextState);
 
         /// <summary>
-        /// Gets all productions that can reduce from the specified state.
+        /// Gets all productions that can reduce from the specified state
+        /// with the specified lookahead token type.
         /// </summary>
         /// <param name="state">The current state.</param>
         /// <param name="lookahead">The lookahead token type.</param>

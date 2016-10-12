@@ -79,7 +79,7 @@ namespace Slang.Parser
             // This removes the need for a separate EOF token, and allows arbitrary reductions
             // that reduce to the start symbol.
 
-            return MergeRemainingPaths(stacks);
+            return MergeRemainingStacks(stacks);
         }
 
 
@@ -161,6 +161,11 @@ namespace Slang.Parser
         /// </remarks>
         private void ShiftAll(TToken token, Stacks<TState> stacks)
         {
+            #region Contract
+            Debug.Assert(token != null);
+            Debug.Assert(stacks != null);
+            #endregion
+
             foreach (var frame in stacks.Tops)
             {
                 TState nextState;
@@ -175,12 +180,16 @@ namespace Slang.Parser
         }
 
         /// <summary>
-        /// Merges the remaining paths.
+        /// Merges the remaining stacks.
         /// </summary>
         /// <param name="stacks">The stacks.</param>
-        /// <returns>The tree resulting from merging the paths.</returns>
-        private TTree MergeRemainingPaths(Stacks<TState> stacks)
+        /// <returns>The tree resulting from merging the stacks.</returns>
+        private TTree MergeRemainingStacks(Stacks<TState> stacks)
         {
+            #region Contract
+            Debug.Assert(stacks != null);
+            #endregion
+            
             var paths = stacks.GetPaths(2, null, null);
             var alternatives = paths.Select(p => p.GetParseTrees(this.parseTreeBuilder).First()).ToArray();
             return this.parseTreeBuilder.Merge(alternatives);
