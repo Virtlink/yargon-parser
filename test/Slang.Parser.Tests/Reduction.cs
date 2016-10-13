@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Slang.Parsing;
 
-namespace Slang.Parser.Tests
+namespace Slang.Parser
 {
     /// <summary>
     /// A parser reduction.

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Slang.Parsing;
 
-namespace Slang.Parser.Tests
+namespace Slang.Parser
 {
     /// <summary>
     /// A parse table.

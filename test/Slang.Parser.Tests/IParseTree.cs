@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Slang.Parser.Tests
+namespace Slang.Parser
 {
     /// <summary>
     /// A parse tree node.
