@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slang", "src\Slang\Slang.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slang.Parser.Tests", "test\Slang.Parser.Tests\Slang.Parser.Tests.csproj", "{C6594DD0-2F44-4AD5-B971-921E85466293}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spoofax.Terms", "src\Spoofax.Terms\Spoofax.Terms.csproj", "{9A22AC04-8934-4EE3-A559-103BBF86E21A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spoofax.Terms.Tests", "test\Spoofax.Terms.Tests\Spoofax.Terms.Tests.csproj", "{99346232-169B-43FD-882A-DB5119343238}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{C6594DD0-2F44-4AD5-B971-921E85466293}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6594DD0-2F44-4AD5-B971-921E85466293}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6594DD0-2F44-4AD5-B971-921E85466293}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A22AC04-8934-4EE3-A559-103BBF86E21A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A22AC04-8934-4EE3-A559-103BBF86E21A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A22AC04-8934-4EE3-A559-103BBF86E21A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A22AC04-8934-4EE3-A559-103BBF86E21A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99346232-169B-43FD-882A-DB5119343238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99346232-169B-43FD-882A-DB5119343238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99346232-169B-43FD-882A-DB5119343238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99346232-169B-43FD-882A-DB5119343238}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

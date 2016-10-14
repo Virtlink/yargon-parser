@@ -59,6 +59,7 @@
     <Compile Include="IStringTerm.cs" />
     <Compile Include="ITerm.cs" />
     <Compile Include="ITermVisitor.cs" />
+    <Compile Include="JetBrains.Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Term.cs" />
     <Compile Include="TermExtensions.cs" />
