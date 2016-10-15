@@ -76,10 +76,7 @@ namespace Slang.Parser
         /// <param name="right">The second object to compare.</param>
         /// <returns><see langword="true"/> if <paramref name="left"/> and <paramref name="right"/> are equal;
         /// otherwise, <see langword="false"/>.</returns>
-        public static bool operator ==(Reduction left, Reduction right)
-        {
-            return Object.Equals(left, right);
-        }
+        public static bool operator ==(Reduction left, Reduction right) => Object.Equals(left, right);
 
         /// <summary>
         /// Returns a value that indicates whether two specified <see cref="Reduction"/> objects are not equal.
@@ -88,16 +85,10 @@ namespace Slang.Parser
         /// <param name="right">The second object to compare.</param>
         /// <returns><see langword="true"/> if <paramref name="left"/> and <paramref name="right"/> are not equal;
         /// otherwise, <see langword="false"/>.</returns>
-        public static bool operator !=(Reduction left, Reduction right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(Reduction left, Reduction right) => !(left == right);
         #endregion
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"{this.Symbol}`{this.Arity}";
-        }
+        public override string ToString() => $"{this.Symbol}`{this.Arity}";
     }
 }

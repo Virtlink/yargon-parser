@@ -168,9 +168,7 @@ namespace Slang.Parser
 
             // Create the top path nodes.
             int depth = 0;
-            var pathNodes = (from frame in tops
-                             select new StackPath<TState>(frame))
-                .ToArray();
+            var pathNodes = tops.Select(f => new StackPath<TState>(f)).ToArray();
 
             // Create the selected top path link.
             if (topFrame != null && topLink != null && depth < length)
