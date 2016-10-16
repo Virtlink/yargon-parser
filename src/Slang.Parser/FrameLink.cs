@@ -106,12 +106,13 @@ namespace Slang.Parser
         #endregion
 
         /// <summary>
-        /// Adds a new tree to the link.
+        /// Merges the specified link with this link.
         /// </summary>
-        /// <param name="tree">The tree to add, which may be <see langword="null"/>.</param>
-        public void AddTree(object tree)
+        /// <param name="other">The link to merge with this link.</param>
+        public void MergeWith(FrameLink<TState> other)
         {
-            this.trees.Add(tree);
+            // Add the trees from the specified link to this link.
+            this.trees.AddRange(other.Trees);
         }
 
         /// <inheritdoc />

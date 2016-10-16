@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Virtlink.Utilib.Collections;
 
 namespace Slang.Parser
 {
@@ -28,13 +29,13 @@ namespace Slang.Parser
         /// </remarks>
         public int Height { get; }
 
-        private List<FrameLink<TState>> links = new List<FrameLink<TState>>(1);
+        private ExtHashSet<FrameLink<TState>> links = new ExtHashSet<FrameLink<TState>>();
 
         /// <summary>
         /// Gets a list of links to parent frames.
         /// </summary>
         /// <value>A list of frame links.</value>
-        public IReadOnlyList<FrameLink<TState>> Links => this.links;
+        public IReadOnlyCollection<FrameLink<TState>> Links => this.links;
 
         #region Constructors
         /// <summary>
@@ -59,14 +60,27 @@ namespace Slang.Parser
         /// <summary>
         /// Adds a link.
         /// </summary>
-        public void AddLink(FrameLink<TState> link)
+        /// <returns>The link that's added to the frame.</returns>
+        public FrameLink<TState> AddLink(FrameLink<TState> link)
         {
             #region Contract
             if (link == null)
                 throw new ArgumentNullException(nameof(link));
             #endregion
 
-            this.links.Add(link);
+            FrameLink<TState> existingLink;
+            if (this.links.TryGet(link, out existingLink))
+            {
+                // Merge the new link with the existing link.
+                existingLink.MergeWith(link);
+                return existingLink;
+            }
+            else
+            {
+                // Add a new link.
+                this.links.Add(link);
+                return link;
+            }
         }
 
         /// <inheritdoc />

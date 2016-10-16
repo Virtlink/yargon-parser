@@ -8,6 +8,9 @@ using Slang.Parsing;
 
 namespace Slang.Parser
 {
+    /// <summary>
+    /// An example that parses a string with a simple LR(0) grammar.
+    /// </summary>
     [TestFixture]
     public sealed class Example1
     {
