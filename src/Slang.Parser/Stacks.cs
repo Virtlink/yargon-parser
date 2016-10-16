@@ -82,7 +82,7 @@ namespace Slang.Parser
                 throw new ArgumentNullException(nameof(state));
             if (link == null)
                 throw new ArgumentNullException(nameof(link));
-            if (link.Parent.Height >= this.Height)
+            if (link.Parent.Phase >= this.Height)
                 throw new ArgumentException("The linked parent frame is not a frame before the current stack tops.",
                     nameof(link));
             #endregion
@@ -112,7 +112,7 @@ namespace Slang.Parser
                 throw new ArgumentNullException(nameof(state));
             if (link == null)
                 throw new ArgumentNullException(nameof(link));
-            if (link.Parent.Height >= this.Height + 1)
+            if (link.Parent.Phase >= this.Height + 1)
                 throw new ArgumentException(
                     "The linked parent frame is not a frame before or at the current stack tops.", nameof(link));
             #endregion

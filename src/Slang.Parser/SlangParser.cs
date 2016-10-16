@@ -15,6 +15,11 @@ namespace Slang.Parser
     /// <typeparam name="TState">The type of states.</typeparam>
     /// <typeparam name="TToken">The type of tokens.</typeparam>
     /// <typeparam name="TTree">The type of parse tree.</typeparam>
+    /// <remarks>
+    /// This parser accepts LR(1) grammars that have a single start symbol S,
+    /// an EOF token $, a production S → X$, where X is a single symbol
+    /// from the grammar.
+    /// </remarks>
     public sealed class SlangParser<TState, TToken, TTree>
         where TToken : IToken
     {
@@ -70,15 +75,11 @@ namespace Slang.Parser
                 ShiftAll(token, stacks);
             }
 
-            // Assuming there's a reduction S' → S$, and $ (EOF) is the last token
-            // returned by the token provider, the current stacks will have a length
-            // of two (the reduction to S and the EOF token $). Note that the reduction
-            // S' → S$ is never applied.
-
-            // TODO: Apply the remaining reductions, then merge the stacks of size 1 instead.
-            // This removes the need for a separate EOF token, and allows arbitrary reductions
-            // that reduce to the start symbol.
-
+            // Assuming $ (EOF) is the last token returned by the token provider,
+            // shifting it onto the stacks caused all stacks to be discarded except
+            // those that accept $. The new states on top are those that result from
+            // shifting $, i.e. the accept states.
+            
             return MergeRemainingStacks(stacks);
         }
 
@@ -195,7 +196,25 @@ namespace Slang.Parser
             #region Contract
             Debug.Assert(stacks != null);
             #endregion
-            
+
+            // At this point the last symbol shifted onto the should be $, the EOF symbol.
+
+            // Ideally the grammar includes a production S' → S$, where
+            // the shifting of $ results in stacks that have a height of two.
+            // The relevant parse tree is then on the link between the start state
+            // and the next state. However, a poorly constructed grammar may have
+            // a production S' → ABC$, resulting in higher stacks. Since it wouldn't
+            // be clear which tree we have to return, we'll just error.
+            if (stacks.Tops.Any(t => t.MaxHeight > 2))
+            {
+                throw new InvalidOperationException(
+                    "The remaining stacks are too high. The grammar should have a production S' → S$, " +
+                    "where S' is the start symbol and $ is the EOF token.");
+            }
+
+            Debug.Assert(stacks.Tops.Any(t => t.MinHeight == 2));
+            Debug.Assert(stacks.Tops.Any(t => t.MaxHeight == 2));
+
             var paths = stacks.GetPaths(2, null, null);
             var alternatives = paths.Select(p => p.GetParseTrees(this.parseTreeBuilder).First()).ToArray();
             return this.parseTreeBuilder.Merge(alternatives);

@@ -19,15 +19,27 @@ namespace Slang.Parser
         public TState State { get; }
 
         /// <summary>
-        /// Gets the height of the frame.
+        /// Gets the phase of the frame.
         /// </summary>
-        /// <value>The height of the frame. The first frame has a height of 0.</value>
+        /// <value>The phase of the frame. The first frame is added in phase 0.</value>
         /// <remarks>
-        /// The height is directly related to the number of tokens shifted onto
-        /// the stack at any one point. For example, the height of a top frame after
+        /// The phase is directly related to the number of tokens shifted onto
+        /// the stack at any one point. For example, the phase of a top frame after
         /// shifting three tokens onto the stack is 3.
         /// </remarks>
-        public int Height { get; }
+        public int Phase { get; }
+
+        /// <summary>
+        /// Gets the minimum height of this frame.
+        /// </summary>
+        /// <value>The minimum height of this frame.</value>
+        public int MinHeight => this.Links.Count > 0 ? this.Links.Min(l => l.Parent.MinHeight) + 1 : 0;
+
+        /// <summary>
+        /// Gets the maximum height of this frame.
+        /// </summary>
+        /// <value>The maximum height of this frame.</value>
+        public int MaxHeight => this.Links.Count > 0 ? this.Links.Max(l => l.Parent.MaxHeight) + 1 : 0;
 
         private ExtHashSet<FrameLink<TState>> links = new ExtHashSet<FrameLink<TState>>();
 
@@ -42,18 +54,18 @@ namespace Slang.Parser
         /// Initializes a new instance of the <see cref="Frame{TState}"/> class.
         /// </summary>
         /// <param name="state">The state of the frame.</param>
-        /// <param name="height">The height of the frame.</param>
-        internal Frame(TState state, int height)
+        /// <param name="phase">The phase of the frame.</param>
+        internal Frame(TState state, int phase)
         {
             #region Contract
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            if (height < 0)
-                throw new ArgumentOutOfRangeException(nameof(height));
+            if (phase < 0)
+                throw new ArgumentOutOfRangeException(nameof(phase));
             #endregion
 
             this.State = state;
-            this.Height = height;
+            this.Phase = phase;
         }
         #endregion
 
