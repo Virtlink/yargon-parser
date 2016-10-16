@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Slang.Parsing;
 
 namespace Slang.Parser
 {
@@ -95,6 +96,24 @@ namespace Slang.Parser
             {
                 var trees = n.Link.Trees;
                 result[pos++] = parseTreeBuilder.Merge(trees.Cast<TTree>().ToArray());
+                n = n.Next;
+            }
+            Debug.Assert(pos == this.Depth);
+            return result;
+        }
+
+        /// <summary>
+        /// Gets all the symbols for this path.
+        /// </summary>
+        /// <returns>A list of symbols, one for each path node.</returns>
+        public IEnumerable<ISymbol> GetSymbols()
+        {
+            var result = new ISymbol[this.Depth];
+            StackPath<TState> n = this;
+            int pos = 0;
+            while (n?.Link != null)
+            {
+                result[pos++] = n.Link.Symbol;
                 n = n.Next;
             }
             Debug.Assert(pos == this.Depth);

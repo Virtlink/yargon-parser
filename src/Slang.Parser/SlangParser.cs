@@ -135,15 +135,21 @@ namespace Slang.Parser
             Debug.Assert(path.Depth == reduction.Arity);
             Debug.Assert(stacks != null);
             #endregion
+
             // Apply the reduction to the path.
             // This will introduce a new link to a new or existing frame.
             var baseFrame = path.Frame; // The top frame after reduction.
             TState nextState;
             if (!this.ParseTable.TryGetGoto(baseFrame.State, reduction.Symbol, out nextState))
                 throw new InvalidOperationException($"No goto action for ({baseFrame.State}, {reduction.Symbol}) pair.");
+
+            // TODO: We could check the right-hand symbols of the reduction using path.GetSymbols().
+            // Since I've proven that these should always match, a mismatch would indicate an error
+            // in the built parse table. Therefore this should be a Debug.Assert().
+
             var arguments = path.GetParseTrees(this.parseTreeBuilder);
             var tree = this.parseTreeBuilder.BuildProduction(reduction, arguments);
-            var newLink = new FrameLink<TState>(baseFrame, tree);
+            var newLink = new FrameLink<TState>(baseFrame, reduction.Symbol, tree);
             var newFrame = stacks.AddLinkToTopFrame(nextState, newLink);
             return Tuple.Create(newFrame, newLink);
         }
@@ -173,7 +179,7 @@ namespace Slang.Parser
                     continue;
                 Debug.Assert(nextState != null);
                 var tree = this.parseTreeBuilder.BuildToken(token);
-                var link = new FrameLink<TState>(frame, tree);
+                var link = new FrameLink<TState>(frame, token.Type, tree);
                 stacks.AddLinkToWorkspaceFrame(nextState, link);
             }
             stacks.Advance();
