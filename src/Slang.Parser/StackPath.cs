@@ -39,6 +39,13 @@ namespace Slang.Parser
         /// or <see langword="null"/> when the end of the path was reached.</value>
         public FrameLink<TState> Link { get; }
 
+        /// <summary>
+        /// Gets whether any link on this path is rejected.
+        /// </summary>
+        /// <value><see langword="true"/> when any link on this path is rejected;
+        /// otherwise, <see langword="false"/>.</value>
+        public bool IsRejected => this.GetLinks().Any(l => l.IsRejected);
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="StackPath{TState}"/> class.
@@ -76,6 +83,24 @@ namespace Slang.Parser
             this.Depth = 0;
         }
         #endregion
+
+        /// <summary>
+        /// Gets all links on this path.
+        /// </summary>
+        /// <returns>The links on this path.</returns>
+        public IReadOnlyList<FrameLink<TState>> GetLinks()
+        {
+            var result = new FrameLink<TState>[this.Depth];
+            StackPath<TState> n = this;
+            int pos = 0;
+            while (n?.Link != null)
+            {
+                result[pos++] = n.Link;
+                n = n.Next;
+            }
+            Debug.Assert(pos == this.Depth);
+            return result;
+        }
         
         /// <summary>
         /// Gets all the parse trees for this path.
@@ -89,16 +114,12 @@ namespace Slang.Parser
                 throw new ArgumentNullException(nameof(parseTreeBuilder));
             #endregion
 
-            var result = new TTree[this.Depth];
-            StackPath<TState> n = this;
-            int pos = 0;
-            while (n?.Link != null)
+            var links = GetLinks();
+            var result = new TTree[links.Count];
+            for (int i = 0; i < links.Count; i++)
             {
-                var trees = n.Link.Trees;
-                result[pos++] = parseTreeBuilder.Merge(trees.Cast<TTree>().ToArray());
-                n = n.Next;
+                result[i] = parseTreeBuilder.Merge(links[i].Trees.Cast<TTree>().ToArray());
             }
-            Debug.Assert(pos == this.Depth);
             return result;
         }
 
@@ -108,15 +129,12 @@ namespace Slang.Parser
         /// <returns>A list of symbols, one for each path node.</returns>
         public IEnumerable<ISymbol> GetSymbols()
         {
-            var result = new ISymbol[this.Depth];
-            StackPath<TState> n = this;
-            int pos = 0;
-            while (n?.Link != null)
+            var links = GetLinks();
+            var result = new ISymbol[links.Count];
+            for (int i = 0; i < links.Count; i++)
             {
-                result[pos++] = n.Link.Symbol;
-                n = n.Next;
+                result[i] = links[i].Symbol;
             }
-            Debug.Assert(pos == this.Depth);
             return result;
         }
 

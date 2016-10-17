@@ -35,11 +35,18 @@ namespace Slang.Parser
         /// <summary>
         /// Gets the trees associated with this link.
         /// </summary>
-        /// <value>A list of trees, which each may be <see langword="null"/>.</value>
+        /// <value>A list of trees, each of which may be <see langword="null"/>.</value>
         /// <remarks>
         /// More than one tree indicates an ambiguity.
         /// </remarks>
         public IReadOnlyList<object> Trees => this.trees;
+
+        /// <summary>
+        /// Gets whether the link has been rejected.
+        /// </summary>
+        /// <value><see langword="true"/> when the link has been rejected;
+        /// otherwise, <see langword="false"/>.</value>
+        public bool IsRejected { get; private set; }
 
         #region Constructors
         /// <summary>
@@ -47,8 +54,9 @@ namespace Slang.Parser
         /// </summary>
         /// <param name="parent">The parent frame.</param>
         /// <param name="symbol">The symbol on the link.</param>
+        /// <param name="isRejected">Whether the link is rejected.</param>
         /// <param name="tree">The tree associated with the link, which may be <see langword="null"/>.</param>
-        public FrameLink(Frame<TState> parent, ISymbol symbol, [CanBeNull] object tree)
+        public FrameLink(Frame<TState> parent, ISymbol symbol, bool isRejected, [CanBeNull] object tree)
         {
             #region Contract
             if (parent == null)
@@ -59,6 +67,7 @@ namespace Slang.Parser
 
             this.Parent = parent;
             this.Symbol = symbol;
+            this.IsRejected = isRejected;
             this.trees = new List<object>(1) { tree };
         }
         #endregion
@@ -113,12 +122,15 @@ namespace Slang.Parser
         {
             // Add the trees from the specified link to this link.
             this.trees.AddRange(other.Trees);
+
+            // This link is rejected if the other link was rejected.
+            this.IsRejected = this.IsRejected || other.IsRejected;
         }
 
         /// <inheritdoc />
         public override string ToString()
         {
-            return $"{this.Parent} <-- {this.Symbol} --";
+            return $"{this.Parent} <-- {this.Symbol} --" + (this.IsRejected ? " {rejected}" : "");
         }
     }
 }

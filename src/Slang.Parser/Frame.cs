@@ -49,6 +49,16 @@ namespace Slang.Parser
         /// <value>A list of frame links.</value>
         public IReadOnlyCollection<FrameLink<TState>> Links => this.links;
 
+        /// <summary>
+        /// Gets whether this frame has been rejected.
+        /// </summary>
+        /// <value><see langword="true"/> when all links to this frame have been rejected;
+        /// otherwise, <see langword="false"/>.</value>
+        /// <remarks>
+        /// This property also returns <see langword="false"/> when the frame has no links.
+        /// </remarks>
+        public bool IsRejected => this.Links.Count > 0 && this.Links.All(l => l.IsRejected);
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Frame{TState}"/> class.

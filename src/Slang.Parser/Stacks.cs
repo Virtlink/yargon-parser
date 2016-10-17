@@ -75,7 +75,7 @@ namespace Slang.Parser
         /// <param name="state">The state of the frame to which to add the link.</param>
         /// <param name="link">The link to add.</param>
         /// <returns>The frame to which the link was added.</returns>
-        public Frame<TState> AddLinkToTopFrame(TState state, FrameLink<TState> link)
+        public Tuple<Frame<TState>, FrameLink<TState>> AddLinkToTopFrame(TState state, FrameLink<TState> link)
         {
             #region Contract
             if (state == null)
@@ -93,8 +93,8 @@ namespace Slang.Parser
                 frame = new Frame<TState>(state, this.Height);
                 this.tops.Add(state, frame);
             }
-            frame.AddLink(link);
-            return frame;
+            var newLink = frame.AddLink(link);
+            return Tuple.Create(frame, newLink);
         }
 
         /// <summary>
@@ -163,6 +163,11 @@ namespace Slang.Parser
                 throw new ArgumentException("The end link is not a link of the end frame.", nameof(topLink));
             #endregion
 
+            // NOTE: The link `topLink`, if specified, may be a rejected link.
+            // We ignore that here. If you want a path with that link, be it rejected or not,
+            // you'll get that path. However, any links discovered must not be rejected
+            // or they will not form a path.
+
             // Top frames
             var tops = topFrame != null ? new[] { topFrame } : this.Tops;
 
@@ -183,11 +188,13 @@ namespace Slang.Parser
                 depth += 1;
                 pathNodes = (from path in pathNodes
                              from link in path.Frame.Links
+                             where !link.IsRejected
                              select new StackPath<TState>(link, path))
                     .ToArray();
             }
 
-            return pathNodes;
+            // Return only paths that are not rejected.
+            return pathNodes.Where(p => !p.IsRejected);
         }
 
         /// <inheritdoc />

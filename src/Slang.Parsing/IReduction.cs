@@ -22,5 +22,12 @@ namespace Slang.Parsing
         /// </summary>
         /// <value>The arity.</value>
         int Arity { get; }
+
+        /// <summary>
+        /// Gets whether this reduction rejects.
+        /// </summary>
+        /// <value><see langword="true"/> when this reduction rejects;
+        /// otherwise, <see langword="false"/>.</value>
+        bool Rejects { get; }
     }
 }

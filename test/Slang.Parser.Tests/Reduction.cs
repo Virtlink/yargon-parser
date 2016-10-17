@@ -24,6 +24,9 @@ namespace Slang.Parser
         /// <inheritdoc />
         public int Arity { get; }
 
+        /// <inheritdoc />
+        public bool Rejects { get; }
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Reduction"/> class.
@@ -31,6 +34,18 @@ namespace Slang.Parser
         /// <param name="symbol">The non-terminal symbol resulting from the reduction.</param>
         /// <param name="arity">The number of symbols consumed by the reduction.</param>
         public Reduction(Sort symbol, int arity)
+            : this(symbol, arity, false)
+        {
+            // Nothing to do.
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Reduction"/> class.
+        /// </summary>
+        /// <param name="symbol">The non-terminal symbol resulting from the reduction.</param>
+        /// <param name="arity">The number of symbols consumed by the reduction.</param>
+        /// <param name="rejects">Whether the reduction rejects.</param>
+        public Reduction(Sort symbol, int arity, bool rejects)
         {
             #region Contract
             if (symbol == null)
@@ -41,6 +56,7 @@ namespace Slang.Parser
 
             this.Symbol = symbol;
             this.Arity = arity;
+            this.Rejects = rejects;
         }
         #endregion
 
@@ -54,7 +70,8 @@ namespace Slang.Parser
             return !Object.ReferenceEquals(other, null)
                 && this.GetType() == other.GetType()
                 && Object.Equals(this.Symbol, other.Symbol)
-                && this.Arity == other.Arity;
+                && this.Arity == other.Arity
+                && this.Rejects == other.Rejects;
         }
 
         /// <inheritdoc />
@@ -65,6 +82,7 @@ namespace Slang.Parser
             {
                 hash = hash * 29 + this.Symbol.GetHashCode();
                 hash = hash * 29 + this.Arity.GetHashCode();
+                hash = hash * 29 + this.Rejects.GetHashCode();
             }
             return hash;
         }
@@ -89,6 +107,6 @@ namespace Slang.Parser
         #endregion
 
         /// <inheritdoc />
-        public override string ToString() => $"{this.Symbol}`{this.Arity}";
+        public override string ToString() => $"{this.Symbol}`{this.Arity}" + (this.Rejects ? " {rejects}" : "");
     }
 }

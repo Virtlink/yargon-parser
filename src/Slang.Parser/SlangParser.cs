@@ -16,9 +16,10 @@ namespace Slang.Parser
     /// <typeparam name="TToken">The type of tokens.</typeparam>
     /// <typeparam name="TTree">The type of parse tree.</typeparam>
     /// <remarks>
-    /// This parser accepts LR(1) grammars that have a single start symbol S,
-    /// an EOF token $, a production S → X$, where X is a single symbol
-    /// from the grammar.
+    /// This parser accepts LR(1) non-cyclic grammars
+    /// that have a single start symbol S,
+    /// an EOF token $, and a production S → X$,
+    /// where X is a single symbol from the grammar.
     /// </remarks>
     public sealed class SlangParser<TState, TToken, TTree>
         where TToken : IToken
@@ -91,6 +92,13 @@ namespace Slang.Parser
         /// <param name="stacks">The stacks.</param>
         private void ReduceAll(TToken lookahead, Stacks<TState> stacks)
         {
+            // NOTE: A reduction may introduce a new state with
+            // a rejected link, rejecting the state, while a later reduction
+            // may add another link that is not rejected to the same state,
+            // essentially un-rejecting the state. Therefore we must
+            // reduce everything, and we'll just not shift on rejected stacks
+            // in the next phase.
+
             // Get all the stack tops to try to reduce.
             var worklist = new Queue<Tuple<Frame<TState>, FrameLink<TState>>>(
                 from f in stacks.Tops
@@ -150,9 +158,8 @@ namespace Slang.Parser
 
             var arguments = path.GetParseTrees(this.parseTreeBuilder);
             var tree = this.parseTreeBuilder.BuildProduction(reduction, arguments);
-            var newLink = new FrameLink<TState>(baseFrame, reduction.Symbol, tree);
-            var newFrame = stacks.AddLinkToTopFrame(nextState, newLink);
-            return Tuple.Create(newFrame, newLink);
+            var newLink = new FrameLink<TState>(baseFrame, reduction.Symbol, reduction.Rejects, tree);
+            return stacks.AddLinkToTopFrame(nextState, newLink);
         }
 
         /// <summary>
@@ -173,14 +180,17 @@ namespace Slang.Parser
             Debug.Assert(stacks != null);
             #endregion
 
-            foreach (var frame in stacks.Tops)
+            // We try to shift the token on all non-rejected stacks.
+
+            foreach (var frame in stacks.Tops.Where(f => !f.IsRejected))
             {
                 TState nextState;
                 if (!this.ParseTable.TryGetShift(frame.State, token.Type, out nextState))
                     continue;
+
                 Debug.Assert(nextState != null);
                 var tree = this.parseTreeBuilder.BuildToken(token);
-                var link = new FrameLink<TState>(frame, token.Type, tree);
+                var link = new FrameLink<TState>(frame, token.Type, false, tree);
                 stacks.AddLinkToWorkspaceFrame(nextState, link);
             }
             stacks.Advance();
@@ -212,7 +222,9 @@ namespace Slang.Parser
                     "where S' is the start symbol and $ is the EOF token.");
             }
 
+            // Since at least S$ are on the stacks, the minimum height must be 2.
             Debug.Assert(stacks.Tops.Any(t => t.MinHeight == 2));
+            // Since at most S$ are on the stack (due to the previous check), the maximum height must be 2.
             Debug.Assert(stacks.Tops.Any(t => t.MaxHeight == 2));
 
             var paths = stacks.GetPaths(2, null, null);
