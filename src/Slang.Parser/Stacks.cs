@@ -132,7 +132,9 @@ namespace Slang.Parser
         /// are not reachable from the new stack top are automatically discarded.
         /// The new stack workspace is empty.
         /// </summary>
-        public void Advance()
+        /// <returns><see langword="true"/> when there are still stacks after advancing;
+        /// otherwise, <see langword="false"/>.</returns>
+        public bool Advance()
         {
             // Switch the dictionaries.
             var newWorkspace = this.tops;
@@ -141,6 +143,8 @@ namespace Slang.Parser
             this.tops = this.workspace;
             this.workspace = newWorkspace;
             this.Height += 1;
+
+            return this.tops.Count > 0;
         }
 
         /// <summary>

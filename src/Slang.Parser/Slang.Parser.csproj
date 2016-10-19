@@ -50,6 +50,7 @@
     <Compile Include="FrameLink.cs" />
     <Compile Include="IParseTreeBuilder.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
+    <Compile Include="ParseResult.cs" />
     <Compile Include="ParseTreeUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SlangParser.cs" />

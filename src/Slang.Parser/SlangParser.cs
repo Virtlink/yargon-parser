@@ -56,8 +56,8 @@ namespace Slang.Parser
         /// Parses the output of the specified token provider into a parse tree.
         /// </summary>
         /// <param name="tokenProvider">The token provider to read the tokens from.</param>
-        /// <returns>The resulting parse tree.</returns>
-        public TTree Parse(IEnumerable<TToken> tokenProvider)
+        /// <returns>The parse result.</returns>
+        public ParseResult<TTree> Parse(IEnumerable<TToken> tokenProvider)
         {
             #region Contract
             if (tokenProvider == null)
@@ -73,15 +73,22 @@ namespace Slang.Parser
             foreach (var token in tokenProvider)
             {
                 ReduceAll(token, stacks);
-                ShiftAll(token, stacks);
+                bool success = ShiftAll(token, stacks);
+                if (!success)
+                {
+                    bool corrected = HandleSyntaxError(token, stacks);
+                    if (!corrected)
+                        return new ParseResult<TTree>(false, default(TTree));
+                }
             }
 
             // Assuming $ (EOF) is the last token returned by the token provider,
             // shifting it onto the stacks caused all stacks to be discarded except
             // those that accept $. The new states on top are those that result from
             // shifting $, i.e. the accept states.
-            
-            return MergeRemainingStacks(stacks);
+
+            var tree = MergeRemainingStacks(stacks);
+            return new ParseResult<TTree>(true, tree);
         }
 
 
@@ -136,7 +143,8 @@ namespace Slang.Parser
         /// <param name="path">The path to apply the reduction to.</param>
         /// <param name="stacks">The stacks.</param>
         /// <returns>The frame and frame link resulting from the reduction.</returns>
-        private Tuple<Frame<TState>, FrameLink<TState>> Reduce(IReduction reduction, StackPath<TState> path, Stacks<TState> stacks)
+        private Tuple<Frame<TState>, FrameLink<TState>> Reduce(IReduction reduction, StackPath<TState> path,
+            Stacks<TState> stacks)
         {
             #region Contract
             Debug.Assert(reduction != null);
@@ -167,13 +175,15 @@ namespace Slang.Parser
         /// </summary>
         /// <param name="token">The token to shift.</param>
         /// <param name="stacks">The stacks.</param>
+        /// <returns><see langword="true"/> when all went well;
+        /// otherwise, <see langword="false"/> when the token could not be shifted.</returns>
         /// <remarks>
         /// This method attempts to shift the token onto each currently active stack.
         /// Where this succeeds, this results in a new set of active stacks. The newly
         /// active stacks have links to the previously active stacks, labelled with
         /// the token that was shifted.
         /// </remarks>
-        private void ShiftAll(TToken token, Stacks<TState> stacks)
+        private bool ShiftAll(TToken token, Stacks<TState> stacks)
         {
             #region Contract
             Debug.Assert(token != null);
@@ -193,7 +203,31 @@ namespace Slang.Parser
                 var link = new FrameLink<TState>(frame, token.Type, false, tree);
                 stacks.AddLinkToWorkspaceFrame(nextState, link);
             }
-            stacks.Advance();
+
+            return stacks.Advance();
+        }
+
+
+        /// <summary>
+        /// Handles a syntax error.
+        /// </summary>
+        /// <param name="token">The token that could not be shifted.</param>
+        /// <param name="stacks">The stacks.</param>
+        /// <param name="errorConsumer">The error consumer.</param>
+        /// <returns><see langword="true"/> when the error was corrected and parsing can continue;
+        /// otherwise, <see langword="false"/> when the error was not corrected.</returns>
+        private bool HandleSyntaxError(TToken token, Stacks<TState> stacks)
+        {
+            #region Contract
+            Debug.Assert(token != null);
+            Debug.Assert(stacks != null);
+            #endregion
+
+            // TODO: Implement error handling.
+            
+            // TODO: Report error.
+
+            return false;
         }
 
         /// <summary>

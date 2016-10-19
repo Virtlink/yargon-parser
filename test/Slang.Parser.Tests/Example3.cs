@@ -72,10 +72,11 @@ namespace Slang.Parser
             };
 
             // Act
-            var tree = parser.Parse(input);
+            var result = parser.Parse(input);
 
             // Assert: E(T("this"))
-            Assert.That(tree, Is.EqualTo(Node(E,Node(T, Token(ths, "this")))));
+            Assert.That(result.Success, Is.True);
+            Assert.That(result.Tree, Is.EqualTo(Node(E,Node(T, Token(ths, "this")))));
         }
 
         private ParseTreeNode Node(Sort symbol, params IParseTree[] children) => new ParseTreeNode(symbol, children);

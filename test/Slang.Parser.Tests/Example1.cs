@@ -97,10 +97,11 @@ namespace Slang.Parser
             };
 
             // Act
-            var tree = parser.Parse(input);
+            var result = parser.Parse(input);
 
             // Assert: E(E(T("1")), "-", T("(", E(E(T("2")), "-", T("3")), ")"))
-            Assert.That(tree, Is.EqualTo(
+            Assert.That(result.Success, Is.True);
+            Assert.That(result.Tree, Is.EqualTo(
                 Node(E,
                     Node(E, Node(T, Token(nnn, "1"))),
                     Token(min, "-"),

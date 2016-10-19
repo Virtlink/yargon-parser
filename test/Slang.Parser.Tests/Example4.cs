@@ -9,10 +9,10 @@ using Slang.Parsing;
 namespace Slang.Parser
 {
     /// <summary>
-    /// An example that parses a string with an ambiguous grammar.
+    /// An example that has an error in the input.
     /// </summary>
     [TestFixture]
-    public sealed class Example2
+    public sealed class Example4
     {
         [Test]
         public void Test()
@@ -23,6 +23,7 @@ namespace Slang.Parser
             var E = new Sort("E");
             // Token types
             var pls = new TokenType("+");
+            var exp = new TokenType("^");
             var ddd = new TokenType("d");
             var eof = new TokenType("$");
             var tokens = new[] {pls, ddd, eof};
@@ -65,13 +66,13 @@ namespace Slang.Parser
             var parseTreeBuilder = new ParseTreeBuilder();
             var parser = new SlangParser<State, Token, IParseTree>(parseTable, parseTreeBuilder);
 
-            // Input: 1+(2+3)$
+            // Input: 1+(2^3)$
             var input = new[]
             {
                 new Token(ddd, "1"),
                 new Token(pls, "+"),
                 new Token(ddd, "2"),
-                new Token(pls, "+"),
+                new Token(exp, "^"),
                 new Token(ddd, "3"),
                 new Token(eof, "$"),
             };
@@ -79,38 +80,10 @@ namespace Slang.Parser
             // Act
             var result = parser.Parse(input);
 
-            // Assert: Amb(
-            //             E(E(E("1"), "+", E("2")), "+", E("3")),
-            //             E(E("1"), "+", E(E("2"), "+", E("3")))
-            //         )
-            Assert.That(result.Success, Is.True);
-            Assert.That(((ParseTreeNode)result.Tree).Symbol, Is.EqualTo(ParseTreeBuilder.Amb));
-            Assert.That(((ParseTreeNode)result.Tree).Children, Is.EquivalentTo(new []
-            {
-                Node(E,
-                    Node(E, Token(ddd, "1")),
-                    Token(pls, "+"),
-                    Node(E,
-                        Node(E, Token(ddd, "2")),
-                        Token(pls, "+"),
-                        Node(E, Token(ddd, "3"))
-                    )
-                ),
-                Node(E,
-                    Node(E,
-                        Node(E, Token(ddd, "1")),
-                        Token(pls, "+"),
-                        Node(E, Token(ddd, "2"))
-                    ),
-                    Token(pls, "+"),
-                    Node(E, Token(ddd, "3"))
-                )
-            }));
+            // Assert
+            Assert.That(result.Success, Is.False);
         }
-
-        private ParseTreeNode Node(Sort symbol, params IParseTree[] children) => new ParseTreeNode(symbol, children);
-        private Token Token(TokenType type, string value) => new Token(type, value);
-
+        
         private Dictionary<Tuple<State, ITokenType>, IReadOnlyCollection<IReduction>> Expand(Dictionary<State, Reduction> reductions, IReadOnlyCollection<TokenType> tokens)
         {
             var result = new Dictionary<Tuple<State, ITokenType>, IReadOnlyCollection<IReduction>>();
