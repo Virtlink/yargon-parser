@@ -46,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DotDigraphBuilder.cs" />
+    <Compile Include="FailingErrorHandler.cs" />
     <Compile Include="Frame.cs" />
     <Compile Include="FrameLink.cs" />
+    <Compile Include="IErrorHandler.cs" />
     <Compile Include="IParserInstance.cs" />
     <Compile Include="IParseTreeBuilder.cs" />
     <Compile Include="ITokenProvider.cs" />

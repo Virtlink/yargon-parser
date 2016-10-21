@@ -25,6 +25,7 @@ namespace Slang.Parser
         where TToken : IToken
     {
         private readonly IParseTreeBuilder<TToken, TTree> parseTreeBuilder;
+        private readonly IErrorHandler<TState, TToken> errorHandler;
 
         /// <summary>
         /// Gets the parse table that this parser uses.
@@ -38,17 +39,21 @@ namespace Slang.Parser
         /// </summary>
         /// <param name="parseTable">The parse table.</param>
         /// <param name="parseTreeBuilder">The parse tree builder.</param>
-        public SlangParser(IParseTable<TState, TToken> parseTable, IParseTreeBuilder<TToken, TTree> parseTreeBuilder)
+        /// <param name="errorHandler">The error handler.</param>
+        public SlangParser(IParseTable<TState, TToken> parseTable, IParseTreeBuilder<TToken, TTree> parseTreeBuilder, IErrorHandler<TState, TToken> errorHandler)
         {
             #region Contract
             if (parseTable == null)
                 throw new ArgumentNullException(nameof(parseTable));
             if (parseTreeBuilder == null)
                 throw new ArgumentNullException(nameof(parseTreeBuilder));
+            if (errorHandler == null)
+                throw new ArgumentNullException(nameof(errorHandler));
             #endregion
 
             this.ParseTable = parseTable;
             this.parseTreeBuilder = parseTreeBuilder;
+            this.errorHandler = errorHandler;
         }
         #endregion
 
@@ -76,10 +81,11 @@ namespace Slang.Parser
 
                 instance.TryReduce(token);
                 bool success = instance.TryShift(token);
+
                 if (!success)
                 {
-                    bool corrected = HandleSyntaxError(token, instance);
-                    if (!corrected)
+                    bool recovered = this.errorHandler.Handle(token, instance);
+                    if (!recovered)
                         return new ParseResult<TTree>(false, default(TTree));
                 }
             }
@@ -91,26 +97,6 @@ namespace Slang.Parser
 
             var tree = instance.MergeRemainingStacks();
             return new ParseResult<TTree>(true, tree);
-        }
-
-        /// <summary>
-        /// Handles a syntax error.
-        /// </summary>
-        /// <param name="token">The token that could not be shifted.</param>
-        /// <param name="instance">The parser instance.</param>
-        /// <returns><see langword="true"/> when the error was corrected and parsing can continue;
-        /// otherwise, <see langword="false"/> when the error was not corrected.</returns>
-        private bool HandleSyntaxError(TToken token, Instance instance)
-        {
-            #region Contract
-            Debug.Assert(token != null);
-            #endregion
-
-            // TODO: Implement error handling.
-            
-            // TODO: Report error.
-
-            return false;
         }
 
         /// <summary>

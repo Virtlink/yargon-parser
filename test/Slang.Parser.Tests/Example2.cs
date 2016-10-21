@@ -63,7 +63,7 @@ namespace Slang.Parser
             };
             var parseTable = new ParseTable(startState, gotos, Expand(reductions, tokens));
             var parseTreeBuilder = new ParseTreeBuilder();
-            var parser = new SlangParser<State, Token, IParseTree>(parseTable, parseTreeBuilder);
+            var parser = new SlangParser<State, Token, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, Token>());
 
             // Input: 1+(2+3)$
             var input = new[]
