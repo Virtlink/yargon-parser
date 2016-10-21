@@ -10,7 +10,7 @@ namespace Slang.Parser
     /// <summary>
     /// A stack frame on the Graph-Structured Stack.
     /// </summary>
-    internal sealed class Frame<TState>
+    public sealed class Frame<TState>
     {
         /// <summary>
         /// Gets the state associated with this frame.

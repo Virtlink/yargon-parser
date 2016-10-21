@@ -16,7 +16,7 @@ namespace Slang.Parser
     /// and symbol are equal. The trees are not used in the equality
     /// check.
     /// </remarks>
-    internal sealed class FrameLink<TState>
+    public sealed class FrameLink<TState>
     {
         /// <summary>
         /// Gets the parent frame.

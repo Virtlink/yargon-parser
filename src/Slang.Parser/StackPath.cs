@@ -11,7 +11,7 @@ namespace Slang.Parser
     /// <summary>
     /// A stack path node.
     /// </summary>
-    internal sealed class StackPath<TState>
+    public sealed class StackPath<TState>
     {
         /// <summary>
 		/// Gets the next path node.

@@ -11,7 +11,7 @@ namespace Slang.Parser
     /// <summary>
     /// The Graph-Structured Stack.
     /// </summary>
-    internal sealed class Stacks<TState>
+    public sealed class Stacks<TState>
     {
         /// <summary>
         /// The stack tops.

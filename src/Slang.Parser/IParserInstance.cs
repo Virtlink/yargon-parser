@@ -9,7 +9,7 @@ namespace Slang.Parser
     /// <summary>
     /// A parser instance.
     /// </summary>
-    internal interface IParserInstance<TState, TToken>
+    public interface IParserInstance<TState, TToken>
     {
         /// <summary>
         /// Gets the token provider.
