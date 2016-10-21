@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -136,6 +137,12 @@ namespace Slang.Parser
         /// otherwise, <see langword="false"/>.</returns>
         public bool Advance()
         {
+            if (this.workspace.Count == 0)
+            {
+                // Advancing would discard all stacks.
+                return false;
+            }
+
             // Switch the dictionaries.
             var newWorkspace = this.tops;
             newWorkspace.Clear();
@@ -144,7 +151,44 @@ namespace Slang.Parser
             this.workspace = newWorkspace;
             this.Height += 1;
 
-            return this.tops.Count > 0;
+            Debug.Assert(this.tops.Count > 0);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Pops the top states and links from the stacks.
+        /// </summary>
+        /// <returns><see langword="true"/> when the top states and links were successfully popped from all stacks;
+        /// otherwise, <see langword="false"/> when the stacks are empty.</returns>
+        /// <remarks>
+        /// <para>This discards the top token.</para>
+        /// <para>This doesn't reinstante any previously discarded stacks.</para>
+        /// </remarks>
+        public bool Retreat()
+        {
+            #region Contract
+            Debug.Assert(this.workspace.Count == 0, "The workspace must be empty.");
+            #endregion
+
+            int newHeight = this.Height - 1;
+
+            if (newHeight < 0)
+            {
+                // There are no more states to pop.
+                return false;
+            }
+
+            var newTops = from t in this.Tops
+                          from l in t.Links
+                          where l.Parent.Phase == newHeight
+                          select l.Parent;
+
+            this.tops = newTops.ToDictionary(t => t.State, t => t);
+
+            this.Height = newHeight;
+
+            return true;
         }
 
         /// <summary>
