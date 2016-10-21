@@ -49,6 +49,7 @@
     <Compile Include="Frame.cs" />
     <Compile Include="FrameLink.cs" />
     <Compile Include="IParseTreeBuilder.cs" />
+    <Compile Include="ITokenProvider.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
     <Compile Include="ParseResult.cs" />
     <Compile Include="ParseTreeUtils.cs" />
@@ -56,6 +57,8 @@
     <Compile Include="SlangParser.cs" />
     <Compile Include="StackPath.cs" />
     <Compile Include="Stacks.cs" />
+    <Compile Include="EnumerableTokenProvider.cs" />
+    <Compile Include="TokenProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Slang.Parsing\Slang.Parsing.csproj">

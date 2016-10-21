@@ -57,7 +57,7 @@ namespace Slang.Parser
         /// </summary>
         /// <param name="tokenProvider">The token provider to read the tokens from.</param>
         /// <returns>The parse result.</returns>
-        public ParseResult<TTree> Parse(IEnumerable<TToken> tokenProvider)
+        public ParseResult<TTree> Parse(ITokenProvider<TToken> tokenProvider)
         {
             #region Contract
             if (tokenProvider == null)
@@ -70,8 +70,10 @@ namespace Slang.Parser
             // then shift the token onto the stacks. Only stacks that accept
             // the new token remain.
 
-            foreach (var token in tokenProvider)
+            while (tokenProvider.MoveNext())
             {
+                var token = tokenProvider.Current;
+
                 ReduceAll(token, stacks);
                 bool success = ShiftAll(token, stacks);
                 if (!success)

@@ -77,7 +77,7 @@ namespace Slang.Parser
             };
 
             // Act
-            var result = parser.Parse(input);
+            var result = parser.Parse(TokenProvider.From(input));
 
             // Assert: Amb(
             //             E(E(E("1"), "+", E("2")), "+", E("3")),

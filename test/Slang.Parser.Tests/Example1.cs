@@ -97,7 +97,7 @@ namespace Slang.Parser
             };
 
             // Act
-            var result = parser.Parse(input);
+            var result = parser.Parse(TokenProvider.From(input));
 
             // Assert: E(E(T("1")), "-", T("(", E(E(T("2")), "-", T("3")), ")"))
             Assert.That(result.Success, Is.True);

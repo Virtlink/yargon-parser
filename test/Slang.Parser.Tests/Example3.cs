@@ -72,7 +72,7 @@ namespace Slang.Parser
             };
 
             // Act
-            var result = parser.Parse(input);
+            var result = parser.Parse(TokenProvider.From(input));
 
             // Assert: E(T("this"))
             Assert.That(result.Success, Is.True);
