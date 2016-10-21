@@ -48,6 +48,7 @@
     <Compile Include="DotDigraphBuilder.cs" />
     <Compile Include="Frame.cs" />
     <Compile Include="FrameLink.cs" />
+    <Compile Include="IParserInstance.cs" />
     <Compile Include="IParseTreeBuilder.cs" />
     <Compile Include="ITokenProvider.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
