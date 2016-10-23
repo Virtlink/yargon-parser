@@ -82,6 +82,8 @@ namespace Slang.Parser
 
             // Assert
             Assert.That(result.Success, Is.False);
+            Assert.That(result.Messages.Single().Kind, Is.EqualTo(MessageKind.Error));
+            Assert.That(result.Messages.Single().Text, Is.EqualTo("Unexpected: \"^\""));
         }
         
         private Dictionary<Tuple<State, ITokenType>, IReadOnlyCollection<IReduction>> Expand(Dictionary<State, Reduction> reductions, IReadOnlyCollection<TokenType> tokens)

@@ -25,9 +25,8 @@ namespace Slang.Parser
                 throw new ArgumentNullException(nameof(parserInstance));
             #endregion
 
-            // TODO: Implement error handling.
-
-            // TODO: Report error.
+            // TODO: Add source location.
+            parserInstance.Messages.Add(new Message(MessageKind.Error, "Unexpected: " + token, null));
 
             return false;
         }

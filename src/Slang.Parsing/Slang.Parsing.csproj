@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ErrorMessage.cs" />
     <Compile Include="IParseTable.cs" />
     <Compile Include="IReduction.cs" />
     <Compile Include="ISort.cs" />
@@ -49,10 +48,12 @@
     <Compile Include="IToken.cs" />
     <Compile Include="ITokenType.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
+    <Compile Include="MessageKind.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceLocation.cs" />
+    <Compile Include="IMessage.cs" />
     <Compile Include="SourceRange.cs" />
-    <Compile Include="SourceMessage.cs" />
+    <Compile Include="Message.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

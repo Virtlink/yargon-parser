@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Slang.Parsing;
 
 namespace Slang.Parser
 {
@@ -22,6 +23,12 @@ namespace Slang.Parser
         /// </summary>
         /// <value>The stacks.</value>
         Stacks<TState> Stacks { get; }
+
+        /// <summary>
+        /// Gets the messages produced by the parser.
+        /// </summary>
+        /// <value>A collection of messages.</value>
+        ICollection<IMessage> Messages { get; }
 
         /// <summary>
         /// Attempts to reduce all the stacks as much as possible.

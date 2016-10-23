@@ -86,7 +86,7 @@ namespace Slang.Parser
                 {
                     bool recovered = this.errorHandler.Handle(token, instance);
                     if (!recovered)
-                        return new ParseResult<TTree>(false, default(TTree));
+                        return new ParseResult<TTree>(false, default(TTree), instance.Messages.ToArray());
                 }
             }
 
@@ -96,7 +96,7 @@ namespace Slang.Parser
             // shifting $, i.e. the accept states.
 
             var tree = instance.MergeRemainingStacks();
-            return new ParseResult<TTree>(true, tree);
+            return new ParseResult<TTree>(true, tree, instance.Messages.ToArray());
         }
 
         /// <summary>
@@ -111,6 +111,9 @@ namespace Slang.Parser
             
             /// <inheritdoc />
             public Stacks<TState> Stacks { get; }
+
+            /// <inheritdoc />
+            public ICollection<IMessage> Messages { get; } = new List<IMessage>();
 
             #region Constructors
             /// <summary>
