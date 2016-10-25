@@ -12,7 +12,7 @@ namespace Slang.Parser
     /// An example that parses a string with an ambiguous grammar.
     /// </summary>
     [TestFixture]
-    public sealed class Example2
+    public sealed class Example2 : ExampleBase
     {
         [Test]
         public void Test()
@@ -63,18 +63,18 @@ namespace Slang.Parser
             };
             var parseTable = new ParseTable(startState, gotos, Expand(reductions, tokens));
             var parseTreeBuilder = new ParseTreeBuilder();
-            var parser = new SlangParser<State, Token, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, Token>());
+            var parser = new SlangParser<State, String, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, String>());
 
             // Input: 1+(2+3)$
-            var input = new[]
+            var input = Collect(new []
             {
-                new Token(ddd, "1"),
-                new Token(pls, "+"),
-                new Token(ddd, "2"),
-                new Token(pls, "+"),
-                new Token(ddd, "3"),
-                new Token(eof, "$"),
-            };
+                Tuple.Create("1", ddd),
+                Tuple.Create("+", pls),
+                Tuple.Create("2", ddd),
+                Tuple.Create("+", pls),
+                Tuple.Create("3", ddd),
+                Tuple.Create("$", eof),
+            });
 
             // Act
             var result = parser.Parse(TokenProvider.From(input));
@@ -84,8 +84,9 @@ namespace Slang.Parser
             //             E(E("1"), "+", E(E("2"), "+", E("3")))
             //         )
             Assert.That(result.Success, Is.True);
-            Assert.That(((ParseTreeNode)result.Tree).Symbol, Is.EqualTo(ParseTreeBuilder.Amb));
-            Assert.That(((ParseTreeNode)result.Tree).Children, Is.EquivalentTo(new []
+            var tree = (ParseTreeNode)StripLocations(result.Tree);
+            Assert.That(tree.Symbol, Is.EqualTo(ParseTreeBuilder.Amb));
+            Assert.That(tree.Children, Is.EquivalentTo(new []
             {
                 Node(E,
                     Node(E, Token(ddd, "1")),
@@ -106,22 +107,6 @@ namespace Slang.Parser
                     Node(E, Token(ddd, "3"))
                 )
             }));
-        }
-
-        private ParseTreeNode Node(Sort symbol, params IParseTree[] children) => new ParseTreeNode(symbol, children);
-        private Token Token(TokenType type, string value) => new Token(type, value);
-
-        private Dictionary<Tuple<State, ITokenType>, IReadOnlyCollection<IReduction>> Expand(Dictionary<State, Reduction> reductions, IReadOnlyCollection<TokenType> tokens)
-        {
-            var result = new Dictionary<Tuple<State, ITokenType>, IReadOnlyCollection<IReduction>>();
-            foreach (var pair in reductions)
-            {
-                foreach (var token in tokens)
-                {
-                    result.Add(Tuple.Create(pair.Key, (ITokenType)token), new [] { pair.Value });
-                }
-            }
-            return result;
         }
     }
 }

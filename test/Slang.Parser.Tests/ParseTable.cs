@@ -11,7 +11,7 @@ namespace Slang.Parser
     /// <summary>
     /// A parse table.
     /// </summary>
-    public sealed class ParseTable : IParseTable<State, Token>
+    public sealed class ParseTable : IParseTable<State>
     {
         /// <summary>
         /// The goto-table.

@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Slang.Parsing;
 
 namespace Slang.Parser
 {
     /// <summary>
     /// Provides the tokens.
     /// </summary>
-    public interface ITokenProvider<TToken> : IDisposable
+    public interface ITokenProvider<T> : IDisposable
     {
         /// <summary>
         /// Gets the current token.
         /// </summary>
         /// <value>The current token;
-        /// or the default of <typeparamref name="TToken"/> when the provider is positioned
+        /// or the default of <typeparamref name="T"/> when the provider is positioned
         /// before the first or after the last token.</value>
-        TToken Current { get; }
+        Token<T> Current { get; }
 
         /// <summary>
         /// Moves to the next token.

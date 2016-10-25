@@ -11,9 +11,7 @@ namespace Slang.Parsing
     /// A parse table.
     /// </summary>
     /// <typeparam name="TState">The type of states.</typeparam>
-    /// <typeparam name="TToken">The type of tokens.</typeparam>
-    public interface IParseTable<TState, TToken>
-        where TToken : IToken
+    public interface IParseTable<TState>
     {
         /// <summary>
         /// Gets the start state of the parser.

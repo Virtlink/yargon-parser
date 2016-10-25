@@ -12,7 +12,7 @@ namespace Slang.Parser
     /// An example that has an error in the input.
     /// </summary>
     [TestFixture]
-    public sealed class Example4
+    public sealed class Example4 : ExampleBase
     {
         [Test]
         public void Test()
@@ -64,18 +64,18 @@ namespace Slang.Parser
             };
             var parseTable = new ParseTable(startState, gotos, Expand(reductions, tokens));
             var parseTreeBuilder = new ParseTreeBuilder();
-            var parser = new SlangParser<State, Token, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, Token>());
+            var parser = new SlangParser<State, String, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, String>());
 
             // Input: 1+(2^3)$
-            var input = new[]
+            var input = Collect(new[]
             {
-                new Token(ddd, "1"),
-                new Token(pls, "+"),
-                new Token(ddd, "2"),
-                new Token(exp, "^"),
-                new Token(ddd, "3"),
-                new Token(eof, "$"),
-            };
+                Tuple.Create("1", ddd),
+                Tuple.Create("+", pls),
+                Tuple.Create("2", ddd),
+                Tuple.Create("^", exp),
+                Tuple.Create("3", ddd),
+                Tuple.Create("$", eof),
+            });
 
             // Act
             var result = parser.Parse(TokenProvider.From(input));
@@ -83,20 +83,7 @@ namespace Slang.Parser
             // Assert
             Assert.That(result.Success, Is.False);
             Assert.That(result.Messages.Single().Kind, Is.EqualTo(MessageKind.Error));
-            Assert.That(result.Messages.Single().Text, Is.EqualTo("Unexpected: \"^\""));
-        }
-        
-        private Dictionary<Tuple<State, ITokenType>, IReadOnlyCollection<IReduction>> Expand(Dictionary<State, Reduction> reductions, IReadOnlyCollection<TokenType> tokens)
-        {
-            var result = new Dictionary<Tuple<State, ITokenType>, IReadOnlyCollection<IReduction>>();
-            foreach (var pair in reductions)
-            {
-                foreach (var token in tokens)
-                {
-                    result.Add(Tuple.Create(pair.Key, (ITokenType)token), new [] { pair.Value });
-                }
-            }
-            return result;
+            Assert.That(result.Messages.Single().Text, Is.EqualTo("Unexpected: '^'"));
         }
     }
 }
