@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Slang.Parsing;
 
 namespace Slang.Parser
 {
@@ -36,7 +37,7 @@ namespace Slang.Parser
         /// the stacks are unchanged. The new stack top states have links to some earlier
         /// state, labelled with the sort of the reduction.
         /// </remarks>
-        bool TryReduce(TToken lookahead);
+        bool TryReduce(Token<TToken> lookahead);
 
         /// <summary>
         /// Attempts to shift the specified token on top of all the stacks.
@@ -51,6 +52,6 @@ namespace Slang.Parser
         /// the stacks are unchanged. The new stack top states each have links to the previous
         /// state, labelled with the token that was shifted.
         /// </remarks>
-        bool TryShift(TToken token);
+        bool TryShift(Token<TToken> token);
     }
 }

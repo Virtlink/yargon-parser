@@ -4,26 +4,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Slang.Parsing;
 
 namespace Slang.Parser
 {
     /// <summary>
     /// Provides tokens.
     /// </summary>
-    /// <typeparam name="TToken"></typeparam>
-    public sealed class EnumerableTokenProvider<TToken> : ITokenProvider<TToken>
+    /// <typeparam name="T"></typeparam>
+    public sealed class EnumerableTokenProvider<T> : ITokenProvider<T>
     {
-        private readonly IEnumerator<TToken> enumerator;
+        private readonly IEnumerator<Token<T>> enumerator;
         
         /// <inheritdoc />
-        public TToken Current => this.enumerator.Current;
+        public Token<T> Current => this.enumerator.Current;
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="EnumerableTokenProvider{TToken}"/> class.
+        /// Initializes a new instance of the <see cref="EnumerableTokenProvider{T}"/> class.
         /// </summary>
         /// <param name="enumerable">The enumerable to wrap.</param>
-        public EnumerableTokenProvider(IEnumerable<TToken> enumerable)
+        public EnumerableTokenProvider(IEnumerable<Token<T>> enumerable)
         {
             #region Contract
             if (enumerable == null)

@@ -17,7 +17,7 @@ namespace Slang.Parser
         /// </summary>
         /// <param name="token">The token.</param>
         /// <returns>The resulting parse tree node.</returns>
-        TTree BuildToken(TToken token);
+        TTree BuildToken(Token<TToken> token);
 
         /// <summary>
         /// Builds a parse tree node from the specified production and arguments.

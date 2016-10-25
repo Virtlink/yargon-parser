@@ -22,7 +22,6 @@ namespace Slang.Parser
     /// where X is a single symbol from the grammar.
     /// </remarks>
     public sealed class SlangParser<TState, TToken, TTree>
-        where TToken : IToken
     {
         private readonly IParseTreeBuilder<TToken, TTree> parseTreeBuilder;
         private readonly IErrorHandler<TState, TToken> errorHandler;
@@ -31,7 +30,7 @@ namespace Slang.Parser
         /// Gets the parse table that this parser uses.
         /// </summary>
         /// <value>The parse table.</value>
-        public IParseTable<TState, TToken> ParseTable { get; }
+        public IParseTable<TState> ParseTable { get; }
 
         #region Constructors
         /// <summary>
@@ -40,7 +39,7 @@ namespace Slang.Parser
         /// <param name="parseTable">The parse table.</param>
         /// <param name="parseTreeBuilder">The parse tree builder.</param>
         /// <param name="errorHandler">The error handler.</param>
-        public SlangParser(IParseTable<TState, TToken> parseTable, IParseTreeBuilder<TToken, TTree> parseTreeBuilder, IErrorHandler<TState, TToken> errorHandler)
+        public SlangParser(IParseTable<TState> parseTable, IParseTreeBuilder<TToken, TTree> parseTreeBuilder, IErrorHandler<TState, TToken> errorHandler)
         {
             #region Contract
             if (parseTable == null)
@@ -132,7 +131,7 @@ namespace Slang.Parser
             #endregion
 
             /// <inheritdoc />
-            public bool TryReduce(TToken lookahead)
+            public bool TryReduce(Token<TToken> lookahead)
             {
                 // NOTE: A reduction may introduce a new state with
                 // a rejected link, rejecting the state, while a later reduction
@@ -208,7 +207,7 @@ namespace Slang.Parser
             }
 
             /// <inheritdoc />
-            public bool TryShift(TToken token)
+            public bool TryShift(Token<TToken> token)
             {
                 #region Contract
                 Debug.Assert(token != null);
