@@ -21,9 +21,8 @@ namespace Slang.Parser
             if (parserInstance == null)
                 throw new ArgumentNullException(nameof(parserInstance));
             #endregion
-
-            // TODO: Add source location.
-            parserInstance.Messages.Add(new Message(MessageKind.Error, "Unexpected: " + token, null));
+            
+            parserInstance.Messages.Add(new Message(MessageKind.Error, "Unexpected: " + token, token.Location));
 
             return false;
         }

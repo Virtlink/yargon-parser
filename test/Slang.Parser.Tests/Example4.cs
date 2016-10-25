@@ -83,7 +83,7 @@ namespace Slang.Parser
             // Assert
             Assert.That(result.Success, Is.False);
             Assert.That(result.Messages.Single().Kind, Is.EqualTo(MessageKind.Error));
-            Assert.That(result.Messages.Single().Text, Is.EqualTo("Unexpected: '^'"));
+            Assert.That(result.Messages.Single().ToString(), Is.EqualTo("1:4: error: Unexpected: '^'"));
         }
     }
 }
