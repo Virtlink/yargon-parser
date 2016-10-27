@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,7 +47,8 @@ namespace Slang.Parser.Sdf
             : this(left, right, null, type)
         {
             #region Contract
-            Contract.Requires<InvalidEnumArgumentException>(Enum.IsDefined(typeof(PriorityType), type));
+            if (!Enum.IsDefined(typeof(PriorityType), type))
+                throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(PriorityType));
             #endregion
         }
 
@@ -65,6 +65,7 @@ namespace Slang.Parser.Sdf
             if (!Enum.IsDefined(typeof(PriorityType), type))
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(PriorityType));
             #endregion
+
             this.Left = left;
             this.Right = right;
             this.Arg = arg;

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{49501580-AAB0-40A8-A37D-A494C9462887}</ProjectGuid>
+    <ProjectGuid>{A63FA119-6FD7-4700-9C4D-708B11F79CBA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Slang.Parser</RootNamespace>
-    <AssemblyName>Slang.Parser</AssemblyName>
+    <RootNamespace>Slang.Parser.Sdf</RootNamespace>
+    <AssemblyName>Slang.Parser.Sdf.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,38 +43,32 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Virtlink.ATerms, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Virtlink.ATerms.1.1.0\lib\net45\Virtlink.ATerms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Virtlink.Utilib, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Virtlink.Utilib.1.7.0\lib\net45\Virtlink.Utilib.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DotDigraphBuilder.cs" />
-    <Compile Include="FailingErrorHandler.cs" />
-    <Compile Include="Frame.cs" />
-    <Compile Include="FrameLink.cs" />
-    <Compile Include="IErrorHandler.cs" />
-    <Compile Include="IParserInstance.cs" />
-    <Compile Include="IParseTreeBuilder.cs" />
-    <Compile Include="ITokenProvider.cs" />
-    <Compile Include="JetBrains.Annotations.cs" />
-    <Compile Include="ParseResult.cs" />
-    <Compile Include="ParseTreeUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SlangParser.cs" />
-    <Compile Include="StackPath.cs" />
-    <Compile Include="Stacks.cs" />
-    <Compile Include="EnumerableTokenProvider.cs" />
-    <Compile Include="TokenProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Slang.Parsing\Slang.Parsing.csproj">
-      <Project>{7caf54e1-004d-4d95-8e45-3e01eb506151}</Project>
-      <Name>Slang.Parsing</Name>
-    </ProjectReference>
+    <Compile Include="SdfParseTableReaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <EmbeddedResource Include="Parsetable1.tbl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Slang.Parser.Sdf\Slang.Parser.Sdf.csproj">
+      <Project>{28422609-a936-48c2-850c-2190ad82501e}</Project>
+      <Name>Slang.Parser.Sdf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Slang.Parsing\Slang.Parsing.csproj">
+      <Project>{7caf54e1-004d-4d95-8e45-3e01eb506151}</Project>
+      <Name>Slang.Parsing</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

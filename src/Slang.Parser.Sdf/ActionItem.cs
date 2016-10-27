@@ -9,7 +9,7 @@ namespace Slang.Parser.Sdf
     /// <summary>
 	/// An action item base class.
 	/// </summary>
-    public abstract class ActionItem : IEquatable<ActionItem>
+    public abstract class ActionItem
     {
         #region Constructors
         /// <summary>

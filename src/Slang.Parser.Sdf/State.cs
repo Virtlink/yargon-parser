@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,16 +64,5 @@ namespace Slang.Parser.Sdf
             var actions = String.Join(", ", this.Actions);
             return $"state({gotos}; {actions})";
         }
-
-        #region Invariants
-        [ContractInvariantMethod]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic",
-            Justification = "Required for code contracts.")]
-        private void ObjectInvariant()
-        {
-            Contract.Invariant(this.Gotos != null);
-            Contract.Invariant(this.Actions != null);
-        }
-        #endregion
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,8 +41,10 @@ namespace Slang.Parser.Sdf
         public Goto(SdfStateRef nextState, IEnumerable<CodePoint> characters, IEnumerable<Label> labels)
         {
             #region Contract
-            Contract.Requires<ArgumentNullException>(characters != null);
-            Contract.Requires<ArgumentNullException>(labels != null);
+            if (characters == null)
+                throw new ArgumentNullException(nameof(characters));
+            if (labels == null)
+                throw new ArgumentNullException(nameof(labels));
             #endregion
 
             this.NextState = nextState;

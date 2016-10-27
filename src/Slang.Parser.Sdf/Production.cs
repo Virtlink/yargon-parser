@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,12 +21,12 @@ namespace Slang.Parser.Sdf
         /// <value>A non-terminal.</value>
         public ISort Symbol { get; }
 
-//        // TODO: This can be of type [T]
-//        /// <summary>
-//        /// Gets the parsing expression on the right-hand of the production rule.
-//        /// </summary>
-//        /// <value>A possibly empty list of terminals and non-terminals.</value>
-//        public IReadOnlyList<ISymbol> Expression { get; }
+        // TODO: This can be of type [T]
+        /// <summary>
+        /// Gets the parsing expression on the right-hand of the production rule.
+        /// </summary>
+        /// <value>A possibly empty list of terminals and non-terminals.</value>
+        public IReadOnlyList<ISymbol> Expression { get; }
 
         /// <summary>
         /// Gets the constructor of the production.
@@ -64,7 +63,7 @@ namespace Slang.Parser.Sdf
         /// Gets the arity of the production.
         /// </summary>
         /// <value>The arity of the production.</value>
-        public int Arity { get; }
+        public int Arity => this.Expression.Count;
 
         public bool IsRecover => this.Flags.HasFlag(ProductionFlags.Recover);
 
@@ -121,18 +120,19 @@ namespace Slang.Parser.Sdf
         /// <param name="constructor">The constructor of the production rule; or <see langword="null"/>.</param>
         /// <param name="type">The type of production.</param>
         /// <param name="flags">The production flags.</param>
-        public Production(ISort symbol, int arity, string constructor, ProductionType type, ProductionFlags flags)
+        public Production(ISort symbol, IReadOnlyList<ISymbol> expression, string constructor, ProductionType type, ProductionFlags flags)
         {
             #region Contract
-            Contract.Requires<ArgumentNullException>(symbol != null);
-//            Contract.Requires<ArgumentNullException>(expression != null);
-            Contract.Requires<InvalidEnumArgumentException>(Enum.IsDefined(typeof(ProductionType), type));
+            if (symbol == null)
+                throw new ArgumentNullException(nameof(symbol));
+            if (!Enum.IsDefined(typeof(ProductionType), type))
+                throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ProductionType));
             #endregion
-            // TODO: Give ReductionKind a value!
-            // TODO: Give ReductionSort a value!
+
+                // TODO: Give ReductionKind a value!
+                // TODO: Give ReductionSort a value!
             this.Symbol = symbol;
-            this.Arity = arity;
-//            this.Expression = expression;
+            this.Expression = expression;
             this.Constructor = constructor;
             this.Type = type;
             this.Flags = flags;
@@ -211,8 +211,7 @@ namespace Slang.Parser.Sdf
                 sb.Append(".").Append(this.Constructor);
 
             sb.Append(" -> ");
-            sb.Append(this.Arity);
-//            sb.Append(String.Join("", this.Expression));
+            sb.Append(String.Join("", this.Expression));
             if (this.Type != ProductionType.None || this.Flags != ProductionFlags.None)
             {
                 sb.Append(" {");

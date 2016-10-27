@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Slang.Parser.Sdf.Productions;
 using Slang.Parsing;
 using Virtlink.ATerms;
+using Virtlink.ATerms.IO;
 using Virtlink.Utilib.Collections;
 
 namespace Slang.Parser.Sdf
@@ -40,9 +38,9 @@ namespace Slang.Parser.Sdf
                 throw new ArgumentNullException(nameof(reader));
             #endregion
 
-            // TODO
-
-            throw new NotImplementedException();
+            var atermReader = ATermFormat.Instance.CreateReader(new TrivialTermFactory());
+            var ast = atermReader.Read(reader);
+            return Parse(ast);
         }
 
         /// <summary>
@@ -418,10 +416,10 @@ namespace Slang.Parser.Sdf
 
             // Redundant information. Let's check it while we're at it.
             var production = productions[label.Index];
-            Contract.Assert(production.Arity == productionArity);
-            Contract.Assert(production.IsCompletion == isCompletion);
-            Contract.Assert(production.IsRecover == isRecover);
-            Contract.Assert(production.Type == status);
+            Debug.Assert(production.Arity == productionArity);
+            Debug.Assert(production.IsCompletion == isCompletion);
+            Debug.Assert(production.IsRecover == isRecover);
+            Debug.Assert(production.Type == status);
 
             return new ReduceActionItem(label, followRestriction);
         }
@@ -568,8 +566,7 @@ namespace Slang.Parser.Sdf
         private IReadOnlyList<ISymbol> ReadExpression(IListTerm term)
         {
             #region Contract
-            Contract.Requires<ArgumentNullException>(term != null);
-            Contract.Ensures(Contract.Result<IReadOnlyList<ISymbol>>() != null);
+            Debug.Assert(term != null);
             #endregion
 
             return term.SubTerms.Select(ReadSymbol).ToArray();
@@ -583,8 +580,7 @@ namespace Slang.Parser.Sdf
         private ISymbol ReadSymbol(ITerm term)
         {
             #region Contract
-            Contract.Requires<ArgumentNullException>(term != null);
-            Contract.Ensures(Contract.Result<ISymbol>() != null);
+            Debug.Assert(term != null);
             #endregion
 
             IConsTerm appl = (IConsTerm)term;
@@ -618,7 +614,7 @@ namespace Slang.Parser.Sdf
         private string ReadConstructor(ITerm term)
         {
             #region Contract
-            Contract.Requires<ArgumentNullException>(term != null);
+            Debug.Assert(term != null);
             #endregion
 
             if (term.IsCons("no-attrs", 0))
@@ -638,8 +634,7 @@ namespace Slang.Parser.Sdf
         private ProductionType ReadProductionType(ITerm term)
         {
             #region Contract
-            Contract.Requires<ArgumentNullException>(term != null);
-            Contract.Ensures(Enum.IsDefined(typeof(ProductionType), Contract.Result<ProductionType>()));
+            Debug.Assert(term != null);
             #endregion
 
             if (term.IsCons("no-attrs", 0))
@@ -687,7 +682,7 @@ namespace Slang.Parser.Sdf
         private ProductionFlags ReadProductionFlags(ITerm term)
         {
             #region Contract
-            Contract.Requires<ArgumentNullException>(term != null);
+            Debug.Assert(term != null);
             #endregion
 
             if (term.IsCons("no-attrs", 0))
@@ -728,8 +723,7 @@ namespace Slang.Parser.Sdf
         private IReadOnlySet<CodePoint> ReadCharacterRanges(IListTerm listTerm)
         {
             #region Contract
-            Contract.Requires<ArgumentNullException>(listTerm != null);
-            Contract.Ensures(Contract.Result<IReadOnlySet<CodePoint>>() != null);
+            Debug.Assert(listTerm != null);
             #endregion
 
             CodePointSet characters = new CodePointSet();

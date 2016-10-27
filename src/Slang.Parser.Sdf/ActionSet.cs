@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,8 +37,10 @@ namespace Slang.Parser.Sdf
         public ActionSet(IEnumerable<CodePoint> characters, IEnumerable<ActionItem> items)
         {
             #region Contract
-            Contract.Requires<ArgumentNullException>(characters != null);
-            Contract.Requires<ArgumentNullException>(items != null);
+            if (characters == null)
+                throw new ArgumentNullException(nameof(characters));
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
             #endregion
 
             this.characters = new CodePointSet(characters);
