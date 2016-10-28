@@ -16,7 +16,7 @@ namespace Slang.Parser.Sdf
         /// </summary>
         public sealed class ReductionCollection
         {
-            private readonly List<List<Tuple<CodePointSet, IReadOnlyList<Production>>>> productions = new List<List<Tuple<CodePointSet, IReadOnlyList<Production>>>>();
+            private readonly List<List<Tuple<CodePointSet, ListSet<Production>>>> productions = new List<List<Tuple<CodePointSet, ListSet<Production>>>>();
 
             #region Constructors
             /// <summary>
@@ -66,7 +66,7 @@ namespace Slang.Parser.Sdf
 
                 // Ensure there are at least enough states in the list.
                 while (this.productions.Count <= state.Index)
-                    this.productions.Add(new List<Tuple<CodePointSet, IReadOnlyList<Production>>>());
+                    this.productions.Add(new List<Tuple<CodePointSet, ListSet<Production>>>());
                 
                 var stateGotos = this.productions[state.Index];
 
@@ -75,7 +75,7 @@ namespace Slang.Parser.Sdf
                     throw new InvalidOperationException(
                         $"For the given state there is already a set of code points that overlaps with the given set. {state}: {lookaheads}");
 
-                stateGotos.Add(Tuple.Create(lookaheads, (IReadOnlyList<Production>)productions.ToArray()));
+                stateGotos.Add(Tuple.Create(lookaheads, new ListSet<Production>(productions)));
             }
         }
     }

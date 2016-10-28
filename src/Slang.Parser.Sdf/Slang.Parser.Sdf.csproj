@@ -43,8 +43,8 @@
       <HintPath>..\..\packages\Virtlink.ATerms.1.1.0\lib\net45\Virtlink.ATerms.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Virtlink.Utilib, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Virtlink.Utilib.1.7.0\lib\net45\Virtlink.Utilib.dll</HintPath>
+    <Reference Include="Virtlink.Utilib, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Virtlink.Utilib.1.8.0\lib\net45\Virtlink.Utilib.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

@@ -128,25 +128,25 @@ namespace Slang.Parser.Sdf
         #endregion
 
         /// <inheritdoc />
-        public bool TryGetShift(SdfStateRef state, ITokenType token, out SdfStateRef nextState)
+        public IEnumerable<SdfStateRef> GetShifts(SdfStateRef state, ITokenType token)
         {
             #region Contract
             if (token == null)
                 throw new ArgumentNullException(nameof(token));
             #endregion
-
-            return this.shifts.TryGet(state, ((TokenType) token).CodePoint, out nextState);
+            
+            return this.shifts.Get(state, ((TokenType)token).CodePoint);
         }
 
         /// <inheritdoc />
-        public bool TryGetGoto(SdfStateRef state, ISort label, out SdfStateRef nextState)
+        public IEnumerable<SdfStateRef> GetGotos(SdfStateRef state, ISort label)
         {
             #region Contract
             if (label == null)
                 throw new ArgumentNullException(nameof(label));
             #endregion
-
-            return this.gotos.TryGet(state, label, out nextState);
+            
+            return this.gotos.Get(state, label);
         }
 
         /// <inheritdoc />
@@ -157,7 +157,7 @@ namespace Slang.Parser.Sdf
                 throw new ArgumentNullException(nameof(lookahead));
             #endregion
 
-            return this.reductions.Get(state, ((TokenType) lookahead).CodePoint);
+            return this.reductions.Get(state, ((TokenType)lookahead).CodePoint);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Slang.Parsing;
+using Virtlink.Utilib.Collections;
 
 namespace Slang.Parser.Sdf
 {
@@ -15,7 +16,7 @@ namespace Slang.Parser.Sdf
         /// </summary>
         public sealed class GotoCollection
         {
-            private readonly List<Dictionary<ISort, SdfStateRef>> gotos = new List<Dictionary<ISort, SdfStateRef>>();
+            private readonly List<Dictionary<ISort, ListSet<SdfStateRef>>> gotos = new List<Dictionary<ISort, ListSet<SdfStateRef>>>();
 
             #region Constructors
             /// <summary>
@@ -27,14 +28,12 @@ namespace Slang.Parser.Sdf
             #endregion
 
             /// <summary>
-            /// Gets the state to go to for a given current state and sort.
+            /// Gets the possible goto states for a given current state and sort.
             /// </summary>
             /// <param name="state">The current state.</param>
             /// <param name="sort">The current sort.</param>
-            /// <param name="nextState">The next state.</param>
-            /// <returns><see langword="true"/> when there is a goto;
-            /// otherwise, <see langword="false"/>.</returns>
-            public bool TryGet(SdfStateRef state, ISort sort, out SdfStateRef nextState)
+            /// <returns>A possibly empty list of states.</returns>
+            public IReadOnlyCollection<SdfStateRef> Get(SdfStateRef state, ISort sort)
             {
                 #region Contract
                 if (sort == null)
@@ -43,12 +42,25 @@ namespace Slang.Parser.Sdf
 
                 if (state.Index >= this.gotos.Count)
                 {
-                    // No goto.
-                    nextState = default(SdfStateRef);
-                    return false;
+                    // No gotos.
+                    return Collection.Empty<SdfStateRef>();
                 }
 
-                return this.gotos[state.Index].TryGetValue(sort, out nextState);
+                var gotoDictionary = this.gotos[state.Index];
+                if (gotoDictionary == null)
+                {
+                    // No gotos.
+                    return Collection.Empty<SdfStateRef>();
+                }
+
+                ListSet<SdfStateRef> nextStates;
+                if (!gotoDictionary.TryGetValue(sort, out nextStates))
+                {
+                    // No gotos.
+                    return Collection.Empty<SdfStateRef>();
+                }
+
+                return nextStates;
             }
 
             /// <summary>
@@ -68,18 +80,23 @@ namespace Slang.Parser.Sdf
 
                 // Ensure there are at least enough states in the list.
                 while (this.gotos.Count <= state.Index)
-                    this.gotos.Add(new Dictionary<ISort, SdfStateRef>());
+                    this.gotos.Add(null);
 
-                var stateGotos = this.gotos[state.Index];
-
-                SdfStateRef existingNextState;
-                if (stateGotos.TryGetValue(sort, out existingNextState) && !existingNextState.Equals(nextState))
+                var gotoDictionary = this.gotos[state.Index];
+                if (gotoDictionary == null)
                 {
-                    throw new InvalidOperationException(
-                        $"For the given state there is already a goto for the given sort. {state}: {sort}");
+                    gotoDictionary = new Dictionary<ISort, ListSet<SdfStateRef>>();
+                    this.gotos[state.Index] = gotoDictionary;
                 }
-                
-                stateGotos[sort] = nextState;
+
+                ListSet<SdfStateRef> nextStates;
+                if (!gotoDictionary.TryGetValue(sort, out nextStates))
+                {
+                    nextStates = new ListSet<SdfStateRef>();
+                    gotoDictionary.Add(sort, nextStates);
+                }
+
+                nextStates.Add(nextState);
             }
         }
     }

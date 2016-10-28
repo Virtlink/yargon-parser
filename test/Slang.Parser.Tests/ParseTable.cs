@@ -48,7 +48,7 @@ namespace Slang.Parser
         #endregion
 
         /// <inheritdoc />
-        public bool TryGetShift(State state, ITokenType token, out State nextState)
+        public IEnumerable<State> GetShifts(State state, ITokenType token)
         {
             #region Contract
             if (state == null)
@@ -57,11 +57,14 @@ namespace Slang.Parser
                 throw new ArgumentNullException(nameof(token));
             #endregion
 
-            return this.gotos.TryGetValue(Tuple.Create(state, (ISymbol)token), out nextState);
+            State nextState;
+            if (!this.gotos.TryGetValue(Tuple.Create(state, (ISymbol)token), out nextState))
+                return Enumerable.Empty<State>();
+            return new[] { nextState };
         }
 
         /// <inheritdoc />
-        public bool TryGetGoto(State state, ISort label, out State nextState)
+        public IEnumerable<State> GetGotos(State state, ISort label)
         {
             #region Contract
             if (state == null)
@@ -70,7 +73,10 @@ namespace Slang.Parser
                 throw new ArgumentNullException(nameof(label));
             #endregion
 
-            return this.gotos.TryGetValue(Tuple.Create(state, (ISymbol)label), out nextState);
+            State nextState;
+            if (!this.gotos.TryGetValue(Tuple.Create(state, (ISymbol)label), out nextState))
+                return Enumerable.Empty<State>();
+            return new[] { nextState };
         }
 
         /// <inheritdoc />

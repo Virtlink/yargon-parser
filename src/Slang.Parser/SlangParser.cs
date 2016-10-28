@@ -195,14 +195,12 @@ namespace Slang.Parser
                 // Apply the reduction to the path.
                 // This will introduce a new link to a new or existing frame.
                 var baseFrame = path.Frame; // The top frame after reduction.
-                TState nextState;
-                if (!this.parser.ParseTable.TryGetGoto(baseFrame.State, reduction.Symbol, out nextState))
-                    throw new InvalidOperationException($"No goto action for ({baseFrame.State}, {reduction.Symbol}) pair.");
+                var nextStates = this.parser.ParseTable.GetGotos(baseFrame.State, reduction.Symbol);
+                var nextState = nextStates.Single();
 
                 // TODO: We could check the right-hand symbols of the reduction using path.GetSymbols().
                 // Since I've proven that these should always match, a mismatch would indicate an error
                 // in the built parse table. Therefore this should be a Debug.Assert().
-
                 var arguments = path.GetParseTrees(this.parser.parseTreeBuilder);
                 var tree = this.parser.parseTreeBuilder.BuildProduction(reduction, arguments);
                 var newLink = new FrameLink<TState>(baseFrame, reduction.Symbol, reduction.Rejects, tree);
@@ -220,14 +218,14 @@ namespace Slang.Parser
 
                 foreach (var frame in this.Stacks.Tops.Where(f => !f.IsRejected))
                 {
-                    TState nextState;
-                    if (!this.parser.ParseTable.TryGetShift(frame.State, token.Type, out nextState))
-                        continue;
-
-                    Debug.Assert(nextState != null);
-                    var tree = this.parser.parseTreeBuilder.BuildToken(token);
-                    var link = new FrameLink<TState>(frame, token.Type, false, tree);
-                    this.Stacks.AddLinkToWorkspaceFrame(nextState, link);
+                    var nextStates = this.parser.ParseTable.GetShifts(frame.State, token.Type);
+                    foreach (var nextState in nextStates)
+                    {
+                        Debug.Assert(nextState != null);
+                        var tree = this.parser.parseTreeBuilder.BuildToken(token);
+                        var link = new FrameLink<TState>(frame, token.Type, false, tree);
+                        this.Stacks.AddLinkToWorkspaceFrame(nextState, link);
+                    }
                 }
 
                 return this.Stacks.Advance();
