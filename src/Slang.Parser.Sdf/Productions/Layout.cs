@@ -1,11 +1,12 @@
-﻿using Slang.Parsing;
+﻿using System;
+using Slang.Parsing;
 
 namespace Slang.Parser.Sdf.Productions
 {
 	/// <summary>
 	/// The special layout sort.
 	/// </summary>
-	public sealed class Layout : ISort
+	public sealed class Layout : ISort, IEquatable<Layout>
     {
 		/// <summary>
 		/// The default instance.
@@ -20,9 +21,29 @@ namespace Slang.Parser.Sdf.Productions
 		{
 			// Nothing to do.
 		}
-		#endregion
+        #endregion
 
-		public override string ToString()
+        #region Equality
+        /// <inheritdoc />
+        public override bool Equals(object obj) => Equals(obj as Layout);
+
+        /// <inheritdoc />
+        public bool Equals(Layout other)
+        {
+            if (Object.ReferenceEquals(other, null) ||      // When 'other' is null
+                other.GetType() != this.GetType())          // or of a different type
+                return false;                               // they are not equal.
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            return 17;
+        }
+        #endregion
+
+        public override string ToString()
 		{
 			return "layout";
 		}

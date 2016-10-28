@@ -1,9 +1,10 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Slang.Parsing;
 
 namespace Slang.Parser.Sdf.Productions
 {
-	public sealed class Iter : ISort
+	public sealed class Iter : ISort, IEquatable<Iter>
     {
 		/// <summary>
 		/// Gets the type.
@@ -21,15 +22,44 @@ namespace Slang.Parser.Sdf.Productions
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Iter"/> class.
 		/// </summary>
-		public Iter(IterType type, object separator, ISymbol child)
+		public Iter(IterType type, [CanBeNull] object separator, ISymbol child)
 		{
 			this.Type = type;
 			this.Separator = separator;
 			this.Child = child;
 		}
-		#endregion
+        #endregion
 
-		public override string ToString()
+        #region Equality
+        /// <inheritdoc />
+        public override bool Equals(object obj) => Equals(obj as Iter);
+
+        /// <inheritdoc />
+        public bool Equals(Iter other)
+        {
+            if (Object.ReferenceEquals(other, null) ||      // When 'other' is null
+                other.GetType() != this.GetType())          // or of a different type
+                return false;                               // they are not equal.
+            return Object.Equals(this.Type, other.Type)
+                && Object.Equals(this.Separator, other.Separator)
+                && Object.Equals(this.Child, other.Child);
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            unchecked
+            {
+                hash = hash * 29 + this.Type.GetHashCode();
+                hash = hash * 29 + this.Separator?.GetHashCode() ?? 0;
+                hash = hash * 29 + this.Child.GetHashCode();
+            }
+            return hash;
+        }
+        #endregion
+
+        public override string ToString()
 		{
 			if (this.Separator != null)
 				return $"{{{this.Child} \"{this.Separator}\"}}{Iter.TypeToString(this.Type)}";

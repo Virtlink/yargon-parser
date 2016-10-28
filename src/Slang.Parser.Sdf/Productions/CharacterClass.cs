@@ -9,7 +9,7 @@ namespace Slang.Parser.Sdf.Productions
 	/// <summary>
 	/// A character class.
 	/// </summary>
-	public sealed class CharacterClass : ITokenType
+	public sealed class CharacterClass : ITokenType, IEquatable<CharacterClass>
 	{
 		/// <summary>
 		/// Gets the characters in the character class.
@@ -32,6 +32,26 @@ namespace Slang.Parser.Sdf.Productions
 			this.Characters = new CodePointSet(characters);
 		}
 		#endregion
+
+        #region Equality
+        /// <inheritdoc />
+        public override bool Equals(object obj) => Equals(obj as CharacterClass);
+
+        /// <inheritdoc />
+        public bool Equals(CharacterClass other)
+        {
+            if (Object.ReferenceEquals(other, null) ||      // When 'other' is null
+                other.GetType() != this.GetType())          // or of a different type
+                return false;                               // they are not equal.
+            return this.Characters.SetEquals(other.Characters);
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            return 17;
+        }
+        #endregion
 
 		/// <inheritdoc />
 		public override string ToString()

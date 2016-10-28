@@ -65,7 +65,106 @@ namespace Slang.Parser.Sdf
 
             // TODO: Injections?
 
-            return new SdfParseTable(initialState, states, productions, priorities);
+            var shifts = CreateShifts(states);
+            var gotos = CreateGotos(states, productions);
+            var reductions = CreateReductions(states, productions);
+
+            return new SdfParseTable(initialState, shifts, gotos, reductions);
+        }
+
+        /// <summary>
+        /// Creates a collection of shifts.
+        /// </summary>
+        /// <param name="states">The states.</param>
+        /// <returns>The collection of shifts.</returns>
+        private SdfParseTable.ShiftCollection CreateShifts(IReadOnlyList<State> states)
+        {
+            #region Contract
+            Debug.Assert(states != null);
+            #endregion
+
+            var shifts = new SdfParseTable.ShiftCollection();
+            for (int i = 0; i < states.Count; i++)
+            {
+                var state = states[i];
+
+                foreach (var actionSet in state.Actions)
+                {
+                    var characters = actionSet.Characters;
+                    var nextState = actionSet.Items.Where(a => a is ShiftActionItem).Cast<ShiftActionItem>().Select(a => (SdfStateRef?)a.NextState).SingleOrDefault();
+                    if (nextState != null)
+                    {
+                        shifts.Set(new SdfStateRef(i), (CodePointSet)characters, (SdfStateRef)nextState);
+                    }
+                }
+            }
+
+            return shifts;
+        }
+
+        /// <summary>
+        /// Creates a collection of gotos.
+        /// </summary>
+        /// <param name="states">The states.</param>
+        /// <param name="productions">The productions.</param>
+        /// <returns>The collection of gotos.</returns>
+        private SdfParseTable.GotoCollection CreateGotos(IReadOnlyList<State> states, IReadOnlyList<Production> productions)
+        {
+            #region Contract
+            Debug.Assert(states != null);
+            Debug.Assert(productions != null);
+            #endregion
+
+            var gotos = new SdfParseTable.GotoCollection();
+            for (int i = 0; i < states.Count; i++)
+            {
+                var state = states[i];
+                foreach (var gto in state.Gotos)
+                {
+                    // NOTE: We ignore character gotos, since they should be duplicated in the shift actions.
+                    var characters = gto.Characters;
+                    var sorts = gto.Labels.Select(l => productions[l.Index].Symbol);
+                    var nextState = gto.NextState;
+                    foreach (var sort in sorts)
+                    {
+                        gotos.Add(new SdfStateRef(i), sort, nextState);
+                    }
+                }
+            }
+
+            return gotos;
+        }
+
+        /// <summary>
+        /// Creates a collection of reductions.
+        /// </summary>
+        /// <param name="states">The states.</param>
+        /// <param name="productions">The productions.</param>
+        /// <returns>The collection of reductions.</returns>
+        private SdfParseTable.ReductionCollection CreateReductions(IReadOnlyList<State> states, IReadOnlyList<Production> productions)
+        {
+            #region Contract
+            Debug.Assert(states != null);
+            Debug.Assert(productions != null);
+            #endregion
+
+            var reductions = new SdfParseTable.ReductionCollection();
+            for (int i = 0; i < states.Count; i++)
+            {
+                var state = states[i];
+
+                foreach (var actionSet in state.Actions)
+                {
+                    var characters = actionSet.Characters;
+                    var stateReductions = actionSet.Items.Where(a => a is ReduceActionItem).Cast<ReduceActionItem>().Select(a => productions[a.Label.Index]);
+                    if (stateReductions.Any())
+                    {
+                        reductions.Set(new SdfStateRef(i), (CodePointSet)characters, stateReductions);
+                    }
+                }
+            }
+
+            return reductions;
         }
 
         /// <summary>

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using Slang.Parsing;
 
 namespace Slang.Parser.Sdf.Productions
 {
-	public sealed class Alt : ISort
+	public sealed class Alt : ISort, IEquatable<Alt>
 	{
 		public ISymbol Left
 		{ get; }
@@ -27,10 +28,37 @@ namespace Slang.Parser.Sdf.Productions
 			this.Left = left;
 			this.Right = right;
 		}
-		#endregion
+        #endregion
 
-		/// <inheritdoc />
-		public override string ToString()
+        #region Equality
+        /// <inheritdoc />
+        public override bool Equals(object obj) => Equals(obj as Alt);
+
+        /// <inheritdoc />
+        public bool Equals(Alt other)
+        {
+            if (Object.ReferenceEquals(other, null) ||      // When 'other' is null
+                other.GetType() != this.GetType())          // or of a different type
+                return false;                               // they are not equal.
+            return Object.Equals(this.Left, other.Left)
+                && Object.Equals(this.Right, other.Right);
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            unchecked
+            {
+                hash = hash * 29 + this.Left.GetHashCode();
+                hash = hash * 29 + this.Right.GetHashCode();
+            }
+            return hash;
+        }
+        #endregion
+
+        /// <inheritdoc />
+        public override string ToString()
 		{
 			return $"{this.Left} | {this.Right}";
 		}

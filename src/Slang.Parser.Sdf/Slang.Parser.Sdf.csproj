@@ -75,12 +75,17 @@
     <Compile Include="ReductionKind.cs" />
     <Compile Include="SdfGoto.cs" />
     <Compile Include="SdfParseTable.cs" />
+    <Compile Include="SdfParseTable.ReductionCollection.cs" />
+    <Compile Include="SdfParseTable.GotoCollection.cs" />
     <Compile Include="SdfParseTableReader.cs" />
     <Compile Include="Production.cs" />
     <Compile Include="ShiftActionItem.cs" />
+    <Compile Include="SdfParseTable.ShiftCollection.cs" />
+    <Compile Include="Sort.cs" />
     <Compile Include="State.cs" />
     <Compile Include="Label.cs" />
     <Compile Include="SdfStateRef.cs" />
+    <Compile Include="TokenType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Slang.Parsing\Slang.Parsing.csproj">
