@@ -47,12 +47,13 @@
       <HintPath>..\..\packages\Virtlink.ATerms.1.1.0\lib\net45\Virtlink.ATerms.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Virtlink.Utilib, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Virtlink.Utilib.1.8.0\lib\net45\Virtlink.Utilib.dll</HintPath>
+    <Reference Include="Virtlink.Utilib, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Virtlink.Utilib.1.9.0\lib\net45\Virtlink.Utilib.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrderedRangedSetTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SdfParseTableReaderTests.cs" />
   </ItemGroup>
@@ -64,6 +65,10 @@
     <ProjectReference Include="..\..\src\Slang.Parser.Sdf\Slang.Parser.Sdf.csproj">
       <Project>{28422609-a936-48c2-850c-2190ad82501e}</Project>
       <Name>Slang.Parser.Sdf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Slang.Parser\Slang.Parser.csproj">
+      <Project>{49501580-aab0-40a8-a37d-a494c9462887}</Project>
+      <Name>Slang.Parser</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Slang.Parsing\Slang.Parsing.csproj">
       <Project>{7caf54e1-004d-4d95-8e45-3e01eb506151}</Project>

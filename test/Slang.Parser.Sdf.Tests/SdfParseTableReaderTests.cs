@@ -2,6 +2,7 @@
 using System.IO;
 using NUnit.Framework;
 using System.Reflection;
+using Slang.Parser.Sdf.Productions.IO;
 using Virtlink.ATerms;
 using Virtlink.ATerms.IO;
 
@@ -16,16 +17,34 @@ namespace Slang.Parser.Sdf
             // Arrange
 		    var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Slang.Parser.Sdf.Parsetable1.tbl");
             Debug.Assert(stream != null);
-		    var reader = new SdfParseTableReader();
-
+            var termFactory = new TrivialTermFactory();
+            var productionFormat = new TermProductionFormat(termFactory);
+            var reader = new SdfParseTableReader(productionFormat);
             
-            // Act
-            var parseTable = reader.Read(new StreamReader(stream));
-
-            // Assert
+            // Act/Assert
+            Assert.That(() =>
+            {
+                var parseTable = reader.Read(new StreamReader(stream));
+            }, Throws.Nothing);
 
             // Cleanup
             stream.Dispose();
 		}
+
+        [Test]
+	    public void ParseString()
+        {
+            // Arrange
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Slang.Parser.Sdf.Parsetable1.tbl");
+            var termFactory = new TrivialTermFactory();
+            var productionFormat = new TermProductionFormat(termFactory);
+            var reader = new SdfParseTableReader(productionFormat);
+            var parseTable = reader.Read(new StreamReader(stream));
+//            var parseTreeBuilder = new ATermParseTreeBuilder();
+//            var parser = new SlangParser<SdfStateRef, string, object>(parseTable, parseTreeBuilder);
+
+            // Act
+
+        }
 	}
 }

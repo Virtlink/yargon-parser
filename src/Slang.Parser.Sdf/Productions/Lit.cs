@@ -3,7 +3,7 @@ using Slang.Parsing;
 
 namespace Slang.Parser.Sdf.Productions
 {
-	public sealed class Lit : ISort, IEquatable<Lit>
+	public sealed class Lit : INonTerminal, IEquatable<Lit>
     {
 		public string Text
 		{ get; }
@@ -47,6 +47,28 @@ namespace Slang.Parser.Sdf.Productions
             return hash;
         }
         #endregion
+
+        /// <inheritdoc />
+        public void Accept(IProductionSymbolVisitor visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            visitor.VisitLit(this);
+        }
+
+        /// <inheritdoc />
+        public TResult Accept<TResult>(IProductionSymbolVisitor<TResult> visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            return visitor.VisitLit(this);
+        }
 
         /// <inheritdoc />
         public override string ToString()

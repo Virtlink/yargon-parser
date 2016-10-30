@@ -3,16 +3,16 @@ using Slang.Parsing;
 
 namespace Slang.Parser.Sdf.Productions
 {
-	public sealed class Lex : ISort, IEquatable<Lex>
+	public sealed class Lex : INonTerminal, IEquatable<Lex>
     {
-		public ISymbol Child
+		public IProductionSymbol Child
 		{ get; }
 
 		#region Constructors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Lex"/> class.
 		/// </summary>
-		public Lex(ISymbol child)
+		public Lex(IProductionSymbol child)
 		{
 			#region Contract
 			if (child == null)
@@ -47,6 +47,28 @@ namespace Slang.Parser.Sdf.Productions
             return hash;
         }
         #endregion
+
+        /// <inheritdoc />
+        public void Accept(IProductionSymbolVisitor visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            visitor.VisitLex(this);
+        }
+
+        /// <inheritdoc />
+        public TResult Accept<TResult>(IProductionSymbolVisitor<TResult> visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            return visitor.VisitLex(this);
+        }
 
         /// <inheritdoc />
         public override string ToString()

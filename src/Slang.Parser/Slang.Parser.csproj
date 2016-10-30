@@ -39,8 +39,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="Virtlink.Utilib, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Virtlink.Utilib.1.8.0\lib\net45\Virtlink.Utilib.dll</HintPath>
+    <Reference Include="Virtlink.Utilib, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Virtlink.Utilib.1.9.0\lib\net45\Virtlink.Utilib.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -51,7 +51,6 @@
     <Compile Include="FrameLink.cs" />
     <Compile Include="IErrorHandler.cs" />
     <Compile Include="IParserInstance.cs" />
-    <Compile Include="IParseTreeBuilder.cs" />
     <Compile Include="ITokenProvider.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
     <Compile Include="ParseResult.cs" />

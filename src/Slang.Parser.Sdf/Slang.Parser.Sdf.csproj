@@ -43,8 +43,8 @@
       <HintPath>..\..\packages\Virtlink.ATerms.1.1.0\lib\net45\Virtlink.ATerms.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Virtlink.Utilib, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Virtlink.Utilib.1.8.0\lib\net45\Virtlink.Utilib.dll</HintPath>
+    <Reference Include="Virtlink.Utilib, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Virtlink.Utilib.1.9.0\lib\net45\Virtlink.Utilib.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -52,17 +52,46 @@
     <Compile Include="AcceptActionItem.cs" />
     <Compile Include="ActionItem.cs" />
     <Compile Include="ActionSet.cs" />
+    <Compile Include="ATermParseTreeBuilder.cs" />
     <Compile Include="CodePoint.cs" />
     <Compile Include="CodePointRange.cs" />
     <Compile Include="CodePointSet.cs" />
+    <Compile Include="Interval.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
+    <Compile Include="OrderedRangedSet.cs" />
+    <Compile Include="ParseTrees\AsFixTreeBuilder.cs" />
+    <Compile Include="ParseTrees\IAmbiguityParseNode.cs" />
+    <Compile Include="ParseTrees\IApplicationParseNode.cs" />
+    <Compile Include="ParseTrees\ICycleParseNode.cs" />
+    <Compile Include="ParseTrees\IParseNode.cs" />
+    <Compile Include="ParseTrees\IParseNodeFactory.cs" />
+    <Compile Include="ParseTrees\IParseNodeVisitor.cs" />
+    <Compile Include="ParseTrees\IParseNodeVisitor`1.cs" />
+    <Compile Include="ParseTrees\IParseTreeTransformer.cs" />
+    <Compile Include="ParseTrees\IProductionParseNode.cs" />
+    <Compile Include="ParseTrees\ParseNodePreference.cs" />
+    <Compile Include="ParseTrees\TrivialParseNodeFactory.AmbiguityParseNode.cs" />
+    <Compile Include="ParseTrees\TrivialParseNodeFactory.ApplicationParseNode.cs" />
+    <Compile Include="ParseTrees\TrivialParseNodeFactory.cs" />
+    <Compile Include="ParseTrees\TrivialParseNodeFactory.CycleParseNode.cs" />
+    <Compile Include="ParseTrees\TrivialParseNodeFactory.ParseNode.cs" />
+    <Compile Include="ParseTrees\TrivialParseNodeFactory.ProductionParseNode.cs" />
     <Compile Include="Priority.cs" />
     <Compile Include="PriorityType.cs" />
     <Compile Include="ProductionFlags.cs" />
     <Compile Include="Productions\Alt.cs" />
     <Compile Include="Productions\Cf.cs" />
     <Compile Include="Productions\CharacterClass.cs" />
+    <Compile Include="Productions\INonTerminal.cs" />
+    <Compile Include="Productions\IO\IProductionFormat.cs" />
+    <Compile Include="Productions\IO\TermProductionFormat.cs" />
+    <Compile Include="Productions\IO\TermProductionFormat.Reader.cs" />
+    <Compile Include="Productions\IO\TermProductionFormat.Writer.cs" />
+    <Compile Include="Productions\IProductionSymbol.cs" />
+    <Compile Include="Productions\IProductionSymbolVisitor.cs" />
+    <Compile Include="Productions\IProductionSymbolVisitor`1.cs" />
     <Compile Include="Productions\Iter.cs" />
+    <Compile Include="Productions\ITerminal.cs" />
     <Compile Include="Productions\IterType.cs" />
     <Compile Include="Productions\Layout.cs" />
     <Compile Include="Productions\Lex.cs" />

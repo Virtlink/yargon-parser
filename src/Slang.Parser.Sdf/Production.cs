@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Slang.Parser.Sdf.Productions;
 using Slang.Parsing;
 using Virtlink.Utilib.Collections;
 
@@ -19,14 +20,17 @@ namespace Slang.Parser.Sdf
         /// Gets the reduction non-terminal on the left-hand of the production rule.
         /// </summary>
         /// <value>A non-terminal.</value>
-        public ISort Symbol { get; }
+        public INonTerminal Symbol { get; }
+
+        /// <inheritdoc />
+        ISort IReduction.Symbol => this.Symbol;
 
         // TODO: This can be of type [T]
         /// <summary>
         /// Gets the parsing expression on the right-hand of the production rule.
         /// </summary>
         /// <value>A possibly empty list of terminals and non-terminals.</value>
-        public IReadOnlyList<ISymbol> Expression { get; }
+        public IReadOnlyList<IProductionSymbol> Expression { get; }
 
         /// <summary>
         /// Gets the constructor of the production.
@@ -111,7 +115,7 @@ namespace Slang.Parser.Sdf
         }
 
         public bool IsOptional => this.ReductionKind == ReductionKind.Optional;
-
+        
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="Production"/> class.
@@ -120,7 +124,7 @@ namespace Slang.Parser.Sdf
         /// <param name="constructor">The constructor of the production rule; or <see langword="null"/>.</param>
         /// <param name="type">The type of production.</param>
         /// <param name="flags">The production flags.</param>
-        public Production(ISort symbol, IReadOnlyList<ISymbol> expression, string constructor, ProductionType type, ProductionFlags flags)
+        public Production(INonTerminal symbol, IReadOnlyList<IProductionSymbol> expression, string constructor, ProductionType type, ProductionFlags flags)
         {
             #region Contract
             if (symbol == null)

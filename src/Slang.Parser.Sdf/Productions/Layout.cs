@@ -6,7 +6,7 @@ namespace Slang.Parser.Sdf.Productions
 	/// <summary>
 	/// The special layout sort.
 	/// </summary>
-	public sealed class Layout : ISort, IEquatable<Layout>
+	public sealed class Layout : INonTerminal, IEquatable<Layout>
     {
 		/// <summary>
 		/// The default instance.
@@ -42,6 +42,28 @@ namespace Slang.Parser.Sdf.Productions
             return 17;
         }
         #endregion
+
+        /// <inheritdoc />
+        public void Accept(IProductionSymbolVisitor visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            visitor.VisitLayout(this);
+        }
+
+        /// <inheritdoc />
+        public TResult Accept<TResult>(IProductionSymbolVisitor<TResult> visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            return visitor.VisitLayout(this);
+        }
 
         public override string ToString()
 		{

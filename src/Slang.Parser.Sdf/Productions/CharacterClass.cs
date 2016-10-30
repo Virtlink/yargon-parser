@@ -9,7 +9,7 @@ namespace Slang.Parser.Sdf.Productions
 	/// <summary>
 	/// A character class.
 	/// </summary>
-	public sealed class CharacterClass : ITokenType, IEquatable<CharacterClass>
+	public sealed class CharacterClass : ITerminal, IEquatable<CharacterClass>
 	{
 		/// <summary>
 		/// Gets the characters in the character class.
@@ -53,8 +53,30 @@ namespace Slang.Parser.Sdf.Productions
         }
         #endregion
 
-		/// <inheritdoc />
-		public override string ToString()
+        /// <inheritdoc />
+        public void Accept(IProductionSymbolVisitor visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            visitor.VisitCharacterClass(this);
+        }
+
+        /// <inheritdoc />
+        public TResult Accept<TResult>(IProductionSymbolVisitor<TResult> visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            return visitor.VisitCharacterClass(this);
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
 		{
 			return this.Characters.ToString();
 		}

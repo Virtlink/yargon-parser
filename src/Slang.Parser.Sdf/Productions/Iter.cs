@@ -4,7 +4,7 @@ using Slang.Parsing;
 
 namespace Slang.Parser.Sdf.Productions
 {
-	public sealed class Iter : ISort, IEquatable<Iter>
+	public sealed class Iter : INonTerminal, IEquatable<Iter>
     {
 		/// <summary>
 		/// Gets the type.
@@ -15,14 +15,14 @@ namespace Slang.Parser.Sdf.Productions
 		public object Separator
 		{ get; }
 
-		public ISymbol Child
+		public IProductionSymbol Child
 		{ get; }
 
 		#region Constructors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Iter"/> class.
 		/// </summary>
-		public Iter(IterType type, [CanBeNull] object separator, ISymbol child)
+		public Iter(IterType type, [CanBeNull] object separator, IProductionSymbol child)
 		{
 			this.Type = type;
 			this.Separator = separator;
@@ -58,6 +58,28 @@ namespace Slang.Parser.Sdf.Productions
             return hash;
         }
         #endregion
+
+        /// <inheritdoc />
+        public void Accept(IProductionSymbolVisitor visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            visitor.VisitIter(this);
+        }
+
+        /// <inheritdoc />
+        public TResult Accept<TResult>(IProductionSymbolVisitor<TResult> visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            return visitor.VisitIter(this);
+        }
 
         public override string ToString()
 		{

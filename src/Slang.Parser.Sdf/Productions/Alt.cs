@@ -4,19 +4,19 @@ using Slang.Parsing;
 
 namespace Slang.Parser.Sdf.Productions
 {
-	public sealed class Alt : ISort, IEquatable<Alt>
+	public sealed class Alt : INonTerminal, IEquatable<Alt>
 	{
-		public ISymbol Left
+		public IProductionSymbol Left
 		{ get; }
 
-		public ISymbol Right
+		public IProductionSymbol Right
 		{ get; }
 
 		#region Constructors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Alt"/> class.
 		/// </summary>
-		public Alt(ISymbol left, ISymbol right)
+		public Alt(IProductionSymbol left, IProductionSymbol right)
 		{
 			#region Contract
 			if (left == null)
@@ -56,6 +56,28 @@ namespace Slang.Parser.Sdf.Productions
             return hash;
         }
         #endregion
+
+        /// <inheritdoc />
+        public void Accept(IProductionSymbolVisitor visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            visitor.VisitAlt(this);
+        }
+
+        /// <inheritdoc />
+        public TResult Accept<TResult>(IProductionSymbolVisitor<TResult> visitor)
+        {
+            #region Contract
+            if (visitor == null)
+                throw new ArgumentNullException(nameof(visitor));
+            #endregion
+
+            return visitor.VisitAlt(this);
+        }
 
         /// <inheritdoc />
         public override string ToString()

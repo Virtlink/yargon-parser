@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Slang.Parsing;
 
-namespace Slang.Parser
+namespace Slang.Parsing
 {
     /// <summary>
     /// Builds a parse tree.
