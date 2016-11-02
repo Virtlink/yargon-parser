@@ -14,10 +14,10 @@ namespace Slang.Parser
     public abstract class ExampleBase
     {
 
-        public IReadOnlyList<Token<String>> Collect(params Tuple<String, TokenType>[] tuples)
+        public IReadOnlyList<TypedToken<String>> Collect(params Tuple<String, TokenType>[] tuples)
         {
             var location = new SourceLocation();
-            var tokens = new List<Token<String>>();
+            var tokens = new List<TypedToken<String>>();
             foreach (var tuple in tuples)
             {
                 var str = tuple.Item1;
@@ -28,13 +28,13 @@ namespace Slang.Parser
                 location = to;
                 var range = new SourceRange(from, to);
 
-                tokens.Add(new Token<string>(str, type, range));
+                tokens.Add(new TypedToken<string>(str, type, range));
             }
             return tokens;
         }
 
         public ParseTreeNode Node(Sort symbol, params IParseTree[] children) => new ParseTreeNode(symbol, children);
-        public ParseTreeToken<T> Token<T>(TokenType type, T value) => new ParseTreeToken<T>(new Token<T>(value, type, null));
+        public ParseTreeToken<T> Token<T>(TokenType type, T value) => new ParseTreeToken<T>(new TypedToken<T>(value, type, null));
 
         public IParseTree StripLocations(IParseTree tree)
         {
@@ -47,7 +47,7 @@ namespace Slang.Parser
             if (tree is ParseTreeToken<String>)
             {
                 var token = ((ParseTreeToken<String>)tree).Token;
-                return new ParseTreeToken<String>(new Token<String>(token.Value, token.Type, null));
+                return new ParseTreeToken<String>(new TypedToken<String>(token.Value, token.Type, null));
             }
 
             throw new InvalidOperationException();

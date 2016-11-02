@@ -51,7 +51,6 @@
     <Compile Include="FrameLink.cs" />
     <Compile Include="IErrorHandler.cs" />
     <Compile Include="IParserInstance.cs" />
-    <Compile Include="ITokenProvider.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
     <Compile Include="ParseResult.cs" />
     <Compile Include="ParseTreeUtils.cs" />

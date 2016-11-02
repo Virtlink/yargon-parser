@@ -7,7 +7,7 @@ using Slang.Parsing;
 
 namespace Slang.Parser.Sdf.Productions
 {
-    public interface ITerminal : IProductionSymbol, ITokenType
+    public interface ITerminal : IProductionSymbol
     {
     }
 }

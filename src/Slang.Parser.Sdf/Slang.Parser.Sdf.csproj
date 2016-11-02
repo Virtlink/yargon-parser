@@ -53,6 +53,7 @@
     <Compile Include="ActionItem.cs" />
     <Compile Include="ActionSet.cs" />
     <Compile Include="ATermParseTreeBuilder.cs" />
+    <Compile Include="CharacterProvider.cs" />
     <Compile Include="CodePoint.cs" />
     <Compile Include="CodePointRange.cs" />
     <Compile Include="CodePointSet.cs" />

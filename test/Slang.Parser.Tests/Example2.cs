@@ -41,19 +41,23 @@ namespace Slang.Parser
 
             // Parse table
             var startState = s0;
-            var gotos = new Dictionary<Tuple<State, ISymbol>, State>()
+            var shifts = new Dictionary<Tuple<State, ITokenType>, State>()
             {
-                [Tuple.Create(s0, (ISymbol)ddd)] = s2,
-                [Tuple.Create(s0, (ISymbol)S)] = s6,
-                [Tuple.Create(s0, (ISymbol)E)] = s1,
+                [Tuple.Create(s0, (ITokenType)ddd)] = s2,
 
-                [Tuple.Create(s1, (ISymbol)pls)] = s4,
-                [Tuple.Create(s1, (ISymbol)eof)] = s3,
+                [Tuple.Create(s1, (ITokenType)pls)] = s4,
+                [Tuple.Create(s1, (ITokenType)eof)] = s3,
+
+                [Tuple.Create(s4, (ITokenType)ddd)] = s2,
+
+                [Tuple.Create(s5, (ITokenType)pls)] = s4,
+            };
+            var gotos = new Dictionary<Tuple<State, ISort>, State>()
+            {
+                [Tuple.Create(s0, (ISort)S)] = s6,
+                [Tuple.Create(s0, (ISort)E)] = s1,
                 
-                [Tuple.Create(s4, (ISymbol)ddd)] = s2,
-                [Tuple.Create(s4, (ISymbol)E)] = s5,
-
-                [Tuple.Create(s5, (ISymbol)pls)] = s4,
+                [Tuple.Create(s4, (ISort)E)] = s5,
             };
             var reductions = new Dictionary<State, Reduction>()
             {
@@ -61,9 +65,9 @@ namespace Slang.Parser
                 [s3] = r0,
                 [s5] = r1,
             };
-            var parseTable = new ParseTable(startState, gotos, Expand(reductions, tokens));
+            var parseTable = new ParseTable(startState, shifts, gotos, Expand(reductions, tokens));
             var parseTreeBuilder = new ParseTreeBuilder();
-            var parser = new SlangParser<State, String, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, String>());
+            var parser = new SlangParser<State, TypedToken<String>, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, TypedToken<String>>());
 
             // Input: 1+(2+3)$
             var input = Collect(new []

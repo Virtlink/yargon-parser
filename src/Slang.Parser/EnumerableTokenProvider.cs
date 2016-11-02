@@ -13,18 +13,19 @@ namespace Slang.Parser
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class EnumerableTokenProvider<T> : ITokenProvider<T>
+        where T : IToken
     {
-        private readonly IEnumerator<Token<T>> enumerator;
+        private readonly IEnumerator<T> enumerator;
         
         /// <inheritdoc />
-        public Token<T> Current => this.enumerator.Current;
+        public T Current => this.enumerator.Current;
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="EnumerableTokenProvider{T}"/> class.
         /// </summary>
         /// <param name="enumerable">The enumerable to wrap.</param>
-        public EnumerableTokenProvider(IEnumerable<Token<T>> enumerable)
+        public EnumerableTokenProvider(IEnumerable<T> enumerable)
         {
             #region Contract
             if (enumerable == null)

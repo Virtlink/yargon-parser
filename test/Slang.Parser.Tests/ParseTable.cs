@@ -11,12 +11,17 @@ namespace Slang.Parser
     /// <summary>
     /// A parse table.
     /// </summary>
-    public sealed class ParseTable : IParseTable<State>
+    public sealed class ParseTable : IParseTable<State, TypedToken<String>>
     {
         /// <summary>
         /// The goto-table.
         /// </summary>
-        private readonly Dictionary<Tuple<State, ISymbol>, State> gotos;
+        private readonly Dictionary<Tuple<State, ISort>, State> gotos;
+
+        /// <summary>
+        /// The goto-table.
+        /// </summary>
+        private readonly Dictionary<Tuple<State, ITokenType>, State> shifts;
 
         /// <summary>
         /// The reduction table.
@@ -30,11 +35,17 @@ namespace Slang.Parser
         /// <summary>
         /// Initializes a new instance of the <see cref="ParseTable"/> class.
         /// </summary>
-        public ParseTable(State startState, Dictionary<Tuple<State, ISymbol>, State> gotos, Dictionary<Tuple<State, ITokenType>, IReadOnlyCollection<IReduction>> reductions)
+        /// <param name="startState">The start state.</param>
+        /// <param name="shifts">The shifts.</param>
+        /// <param name="gotos">The gotos.</param>
+        /// <param name="reductions">The reductions.</param>
+        public ParseTable(State startState, Dictionary<Tuple<State, ITokenType>, State> shifts, Dictionary<Tuple<State, ISort>, State> gotos, Dictionary<Tuple<State, ITokenType>, IReadOnlyCollection<IReduction>> reductions)
         {
             #region Contract
             if (startState == null)
                 throw new ArgumentNullException(nameof(startState));
+            if (shifts == null)
+                throw new ArgumentNullException(nameof(shifts));
             if (gotos == null)
                 throw new ArgumentNullException(nameof(gotos));
             if (reductions == null)
@@ -42,13 +53,14 @@ namespace Slang.Parser
             #endregion
 
             this.StartState = startState;
+            this.shifts = shifts;
             this.gotos = gotos;
             this.reductions = reductions;
         }
         #endregion
 
         /// <inheritdoc />
-        public IEnumerable<State> GetShifts(State state, ITokenType token)
+        public IEnumerable<State> GetShifts(State state, TypedToken<String> token)
         {
             #region Contract
             if (state == null)
@@ -58,7 +70,7 @@ namespace Slang.Parser
             #endregion
 
             State nextState;
-            if (!this.gotos.TryGetValue(Tuple.Create(state, (ISymbol)token), out nextState))
+            if (!this.shifts.TryGetValue(Tuple.Create(state, token.Type), out nextState))
                 return Enumerable.Empty<State>();
             return new[] { nextState };
         }
@@ -74,13 +86,13 @@ namespace Slang.Parser
             #endregion
 
             State nextState;
-            if (!this.gotos.TryGetValue(Tuple.Create(state, (ISymbol)label), out nextState))
+            if (!this.gotos.TryGetValue(Tuple.Create(state, label), out nextState))
                 return Enumerable.Empty<State>();
             return new[] { nextState };
         }
 
         /// <inheritdoc />
-        public IEnumerable<IReduction> GetReductions(State state, ITokenType lookahead)
+        public IEnumerable<IReduction> GetReductions(State state, TypedToken<String> lookahead)
         {
             #region Contract
             if (state == null)
@@ -90,7 +102,7 @@ namespace Slang.Parser
             #endregion
 
             IReadOnlyCollection<IReduction> reductionList;
-            if (!this.reductions.TryGetValue(Tuple.Create(state, lookahead), out reductionList))
+            if (!this.reductions.TryGetValue(Tuple.Create(state, lookahead.Type), out reductionList))
                 return Enumerable.Empty<IReduction>();
             return reductionList;
         }

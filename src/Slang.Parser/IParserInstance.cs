@@ -11,6 +11,7 @@ namespace Slang.Parser
     /// A parser instance.
     /// </summary>
     public interface IParserInstance<TState, TToken>
+            where TToken : IToken
     {
         /// <summary>
         /// Gets the token provider.
@@ -43,7 +44,7 @@ namespace Slang.Parser
         /// the stacks are unchanged. The new stack top states have links to some earlier
         /// state, labelled with the sort of the reduction.
         /// </remarks>
-        bool TryReduce(Token<TToken> lookahead);
+        bool TryReduce(TToken lookahead);
 
         /// <summary>
         /// Attempts to shift the specified token on top of all the stacks.
@@ -58,6 +59,6 @@ namespace Slang.Parser
         /// the stacks are unchanged. The new stack top states each have links to the previous
         /// state, labelled with the token that was shifted.
         /// </remarks>
-        bool TryShift(Token<TToken> token);
+        bool TryShift(TToken token);
     }
 }

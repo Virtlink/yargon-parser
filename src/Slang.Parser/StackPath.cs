@@ -108,6 +108,7 @@ namespace Slang.Parser
         /// <param name="parseTreeBuilder">The parse tree builder.</param>
         /// <returns>A list of parse trees, one for each path node.</returns>
         public IReadOnlyList<TTree> GetParseTrees<TToken, TTree>(IParseTreeBuilder<TToken, TTree> parseTreeBuilder)
+            where TToken : IToken
         {
             #region Contract
             if (parseTreeBuilder == null)
@@ -123,20 +124,20 @@ namespace Slang.Parser
             return result;
         }
 
-        /// <summary>
-        /// Gets all the symbols for this path.
-        /// </summary>
-        /// <returns>A list of symbols, one for each path node.</returns>
-        public IEnumerable<ISymbol> GetSymbols()
-        {
-            var links = GetLinks();
-            var result = new ISymbol[links.Count];
-            for (int i = 0; i < links.Count; i++)
-            {
-                result[i] = links[i].Symbol;
-            }
-            return result;
-        }
+//        /// <summary>
+//        /// Gets all the symbols for this path.
+//        /// </summary>
+//        /// <returns>A list of symbols, one for each path node.</returns>
+//        public IEnumerable<ISymbol> GetSymbols()
+//        {
+//            var links = GetLinks();
+//            var result = new ISymbol[links.Count];
+//            for (int i = 0; i < links.Count; i++)
+//            {
+//                result[i] = links[i].Symbol;
+//            }
+//            return result;
+//        }
 
         /// <inheritdoc />
         public override string ToString()

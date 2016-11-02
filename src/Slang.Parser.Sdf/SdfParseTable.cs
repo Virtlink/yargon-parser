@@ -10,7 +10,7 @@ namespace Slang.Parser.Sdf
     /// <summary>
     /// An SDF parse table.
     /// </summary>
-    public partial class SdfParseTable : IParseTable<SdfStateRef>
+    public partial class SdfParseTable : IParseTable<SdfStateRef, Token<CodePoint>>
     {
 
 //        /// <summary>
@@ -128,14 +128,14 @@ namespace Slang.Parser.Sdf
         #endregion
 
         /// <inheritdoc />
-        public IEnumerable<SdfStateRef> GetShifts(SdfStateRef state, ITokenType token)
+        public IEnumerable<SdfStateRef> GetShifts(SdfStateRef state, Token<CodePoint> token)
         {
             #region Contract
             if (token == null)
                 throw new ArgumentNullException(nameof(token));
             #endregion
             
-            return this.shifts.Get(state, ((TokenType)token).CodePoint);
+            return this.shifts.Get(state, token.Value);
         }
 
         /// <inheritdoc />
@@ -150,14 +150,14 @@ namespace Slang.Parser.Sdf
         }
 
         /// <inheritdoc />
-        public IEnumerable<IReduction> GetReductions(SdfStateRef state, ITokenType lookahead)
+        public IEnumerable<IReduction> GetReductions(SdfStateRef state, Token<CodePoint> lookahead)
         {
             #region Contract
             if (lookahead == null)
                 throw new ArgumentNullException(nameof(lookahead));
             #endregion
 
-            return this.reductions.Get(state, ((TokenType)lookahead).CodePoint);
+            return this.reductions.Get(state, lookahead.Value);
         }
     }
 }

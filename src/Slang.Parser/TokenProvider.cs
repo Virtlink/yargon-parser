@@ -18,7 +18,8 @@ namespace Slang.Parser
         /// <typeparam name="T">The type of tokens.</typeparam>
         /// <param name="enumerable">The enumerable.</param>
         /// <returns>The resulting token provider.</returns>
-        public static ITokenProvider<T> From<T>(IEnumerable<Token<T>> enumerable)
+        public static ITokenProvider<T> From<T>(IEnumerable<T> enumerable)
+            where T : IToken
         {
             #region Contract
             if (enumerable == null)

@@ -44,14 +44,17 @@ namespace Slang.Parser
 
             // Parse table
             var startState = s0;
-            var gotos = new Dictionary<Tuple<State, ISymbol>, State>()
+            var shifts = new Dictionary<Tuple<State, ITokenType>, State>()
             {
-                [Tuple.Create(s0, (ISymbol)ths)] = s1,
-                [Tuple.Create(s0, (ISymbol)I)] = s2,
-                [Tuple.Create(s0, (ISymbol)T)] = s3,
-                [Tuple.Create(s0, (ISymbol)E)] = s4,
-                
-                [Tuple.Create(s4, (ISymbol)eof)] = s5,
+                [Tuple.Create(s0, (ITokenType)ths)] = s1,
+
+                [Tuple.Create(s4, (ITokenType)eof)] = s5,
+            };
+            var gotos = new Dictionary<Tuple<State, ISort>, State>()
+            {
+                [Tuple.Create(s0, (ISort)I)] = s2,
+                [Tuple.Create(s0, (ISort)T)] = s3,
+                [Tuple.Create(s0, (ISort)E)] = s4,
             };
             var reductions = new Dictionary<State, IReadOnlyCollection<Reduction>>()
             {
@@ -60,9 +63,9 @@ namespace Slang.Parser
                 [s3] = new[] { r2 },
                 [s5] = new[] { r0 },
             };
-            var parseTable = new ParseTable(startState, gotos, Expand(reductions, tokens));
+            var parseTable = new ParseTable(startState, shifts, gotos, Expand(reductions, tokens));
             var parseTreeBuilder = new ParseTreeBuilder();
-            var parser = new SlangParser<State, String, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, String>());
+            var parser = new SlangParser<State, TypedToken<String>, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, TypedToken<String>>());
 
             // Input: 1-(2-3)$
             var input = Collect(new[]

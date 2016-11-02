@@ -22,6 +22,7 @@ namespace Slang.Parser
     /// where X is a single symbol from the grammar.
     /// </remarks>
     public sealed class SlangParser<TState, TToken, TTree>
+        where TToken : IToken
     {
         private readonly IParseTreeBuilder<TToken, TTree> parseTreeBuilder;
         private readonly IErrorHandler<TState, TToken> errorHandler;
@@ -30,7 +31,7 @@ namespace Slang.Parser
         /// Gets the parse table that this parser uses.
         /// </summary>
         /// <value>The parse table.</value>
-        public IParseTable<TState> ParseTable { get; }
+        public IParseTable<TState, TToken> ParseTable { get; }
 
         #region Constructors
         /// <summary>
@@ -39,7 +40,7 @@ namespace Slang.Parser
         /// <param name="parseTable">The parse table.</param>
         /// <param name="parseTreeBuilder">The parse tree builder.</param>
         /// <param name="errorHandler">The error handler.</param>
-        public SlangParser(IParseTable<TState> parseTable, IParseTreeBuilder<TToken, TTree> parseTreeBuilder, IErrorHandler<TState, TToken> errorHandler)
+        public SlangParser(IParseTable<TState, TToken> parseTable, IParseTreeBuilder<TToken, TTree> parseTreeBuilder, IErrorHandler<TState, TToken> errorHandler)
         {
             #region Contract
             if (parseTable == null)
@@ -134,7 +135,7 @@ namespace Slang.Parser
             #endregion
 
             /// <inheritdoc />
-            public bool TryReduce(Token<TToken> lookahead)
+            public bool TryReduce(TToken lookahead)
             {
                 // NOTE: A reduction may introduce a new state with
                 // a rejected link, rejecting the state, while a later reduction
@@ -156,7 +157,7 @@ namespace Slang.Parser
                     var endFrame = frameAndLink.Item1;
                     var endLink = frameAndLink.Item2;
 
-                    var reductions = this.parser.ParseTable.GetReductions(endFrame.State, lookahead.Type);
+                    var reductions = this.parser.ParseTable.GetReductions(endFrame.State, lookahead);
                     foreach (var reduction in reductions)
                     {
                         int arity = reduction.Arity;
@@ -208,7 +209,7 @@ namespace Slang.Parser
             }
 
             /// <inheritdoc />
-            public bool TryShift(Token<TToken> token)
+            public bool TryShift(TToken token)
             {
                 #region Contract
                 Debug.Assert(token != null);
@@ -218,12 +219,12 @@ namespace Slang.Parser
 
                 foreach (var frame in this.Stacks.Tops.Where(f => !f.IsRejected))
                 {
-                    var nextStates = this.parser.ParseTable.GetShifts(frame.State, token.Type);
+                    var nextStates = this.parser.ParseTable.GetShifts(frame.State, token);
                     foreach (var nextState in nextStates)
                     {
                         Debug.Assert(nextState != null);
                         var tree = this.parser.parseTreeBuilder.BuildToken(token);
-                        var link = new FrameLink<TState>(frame, token.Type, false, tree);
+                        var link = new FrameLink<TState>(frame, token, false, tree);
                         this.Stacks.AddLinkToWorkspaceFrame(nextState, link);
                     }
                 }

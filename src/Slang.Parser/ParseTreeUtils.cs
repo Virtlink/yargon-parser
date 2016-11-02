@@ -22,6 +22,7 @@ namespace Slang.Parser
         /// <returns>The merged alternatives.</returns>
         public static TTree Merge<TToken, TTree>(this IParseTreeBuilder<TToken, TTree> parseTreeBuilder,
             IReadOnlyCollection<TTree> alternatives)
+            where TToken : IToken
         {
             #region Contract
             if (parseTreeBuilder == null)

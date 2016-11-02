@@ -51,7 +51,10 @@
     <Compile Include="IReduction.cs" />
     <Compile Include="ISort.cs" />
     <Compile Include="ISymbol.cs" />
+    <Compile Include="IToken.cs" />
+    <Compile Include="ITokenProvider.cs" />
     <Compile Include="ITokenType.cs" />
+    <Compile Include="ITypedToken.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
     <Compile Include="MessageKind.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -59,6 +62,7 @@
     <Compile Include="IMessage.cs" />
     <Compile Include="SourceRange.cs" />
     <Compile Include="Message.cs" />
+    <Compile Include="TypedToken.cs" />
     <Compile Include="Token.cs" />
   </ItemGroup>
   <ItemGroup>

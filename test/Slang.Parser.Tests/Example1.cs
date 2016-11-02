@@ -49,27 +49,32 @@ namespace Slang.Parser
 
             // Parse table (LR(0))
             var startState = s1;
-            var gotos = new Dictionary<Tuple<State, ISymbol>, State>()
+            var shifts = new Dictionary<Tuple<State, ITokenType>, State>()
             {
-                [Tuple.Create(s1, (ISymbol)nnn)] = s3,
-                [Tuple.Create(s1, (ISymbol)lbr)] = s6,
-                [Tuple.Create(s1, (ISymbol)E)] = s4,
-                [Tuple.Create(s1, (ISymbol)T)] = s2,
+                [Tuple.Create(s1, (ITokenType)nnn)] = s3,
+                [Tuple.Create(s1, (ITokenType)lbr)] = s6,
+                
+                [Tuple.Create(s4, (ITokenType)min)] = s7,
+                [Tuple.Create(s4, (ITokenType)eof)] = s5,
 
-                [Tuple.Create(s4, (ISymbol)min)] = s7,
-                [Tuple.Create(s4, (ISymbol)eof)] = s5,
+                [Tuple.Create(s6, (ITokenType)nnn)] = s3,
+                [Tuple.Create(s6, (ITokenType)lbr)] = s6,
+                
+                [Tuple.Create(s7, (ITokenType)nnn)] = s3,
+                [Tuple.Create(s7, (ITokenType)lbr)] = s6,
+                
+                [Tuple.Create(s9, (ITokenType)min)] = s7,
+                [Tuple.Create(s9, (ITokenType)rbr)] = s10,
+            };
+            var gotos = new Dictionary<Tuple<State, ISort>, State>()
+            {
+                [Tuple.Create(s1, (ISort)E)] = s4,
+                [Tuple.Create(s1, (ISort)T)] = s2,
 
-                [Tuple.Create(s6, (ISymbol)nnn)] = s3,
-                [Tuple.Create(s6, (ISymbol)lbr)] = s6,
-                [Tuple.Create(s6, (ISymbol)E)] = s9,
-                [Tuple.Create(s6, (ISymbol)T)] = s2,
-
-                [Tuple.Create(s7, (ISymbol)nnn)] = s3,
-                [Tuple.Create(s7, (ISymbol)lbr)] = s6,
-                [Tuple.Create(s7, (ISymbol)T)] = s8,
-
-                [Tuple.Create(s9, (ISymbol)min)] = s7,
-                [Tuple.Create(s9, (ISymbol)rbr)] = s10,
+                [Tuple.Create(s6, (ISort)E)] = s9,
+                [Tuple.Create(s6, (ISort)T)] = s2,
+                
+                [Tuple.Create(s7, (ISort)T)] = s8,
             };
             var reductions = new Dictionary<State, Reduction>()
             {
@@ -79,9 +84,9 @@ namespace Slang.Parser
                 [s8] = r2,
                 [s10] = r5,
             };
-            var parseTable = new ParseTable(startState, gotos, Expand(reductions, tokens));
+            var parseTable = new ParseTable(startState, shifts, gotos, Expand(reductions, tokens));
             var parseTreeBuilder = new ParseTreeBuilder();
-            var parser = new SlangParser<State, String, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, String>());
+            var parser = new SlangParser<State, TypedToken<String>, IParseTree>(parseTable, parseTreeBuilder, new FailingErrorHandler<State, TypedToken<String>>());
 
             // Input: 1-(2-3)$
             var input = Collect(new[]

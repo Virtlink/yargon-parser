@@ -24,6 +24,9 @@ namespace Slang.Parser
         /// <value>The parent frame.</value>
         public Frame<TState> Parent { get; }
 
+        // The symbol is used to compare links,
+        // to be able to mark a link as rejected.
+
         /// <summary>
         /// Gets the symbol on this link.
         /// </summary>

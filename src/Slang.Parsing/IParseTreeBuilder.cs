@@ -11,13 +11,14 @@ namespace Slang.Parsing
     /// Builds a parse tree.
     /// </summary>
     public interface IParseTreeBuilder<TToken, TTree>
+        where TToken : IToken
     {
         /// <summary>
         /// Builds a parse tree node from the specified token.
         /// </summary>
         /// <param name="token">The token.</param>
         /// <returns>The resulting parse tree node.</returns>
-        TTree BuildToken(Token<TToken> token);
+        TTree BuildToken(TToken token);
 
         /// <summary>
         /// Builds a parse tree node from the specified production and arguments.

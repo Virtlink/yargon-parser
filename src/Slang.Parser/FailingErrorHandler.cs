@@ -13,9 +13,10 @@ namespace Slang.Parser
     /// <typeparam name="TState">The type of states.</typeparam>
     /// <typeparam name="TToken">The type of tokens.</typeparam>
     public class FailingErrorHandler<TState, TToken> : IErrorHandler<TState, TToken>
+        where TToken : IToken
     {
         /// <inheritdoc />
-        public bool Handle(Token<TToken> token, IParserInstance<TState, TToken> parserInstance)
+        public bool Handle(TToken token, IParserInstance<TState, TToken> parserInstance)
         {
             #region Contract
             if (parserInstance == null)

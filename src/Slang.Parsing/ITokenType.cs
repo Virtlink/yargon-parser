@@ -9,7 +9,7 @@ namespace Slang.Parsing
     /// <summary>
     /// A parser token type.
     /// </summary>
-    public interface ITokenType : ISort
+    public interface ITokenType
     {
     }
 }

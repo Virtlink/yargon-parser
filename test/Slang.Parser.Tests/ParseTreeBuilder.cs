@@ -10,7 +10,7 @@ namespace Slang.Parser
     /// <summary>
     /// A parse tree builder.
     /// </summary>
-    public sealed class ParseTreeBuilder : IParseTreeBuilder<String, IParseTree>
+    public sealed class ParseTreeBuilder : IParseTreeBuilder<TypedToken<String>, IParseTree>
     {
         /// <summary>
         /// Gets the sort for ambiguous nodes.
@@ -18,7 +18,7 @@ namespace Slang.Parser
         public static Sort Amb { get; } = new Sort("Amb");
 
         /// <inheritdoc />
-        public IParseTree BuildToken(Token<String> token)
+        public IParseTree BuildToken(TypedToken<String> token)
         {
             return new ParseTreeToken<String>(token);
         }

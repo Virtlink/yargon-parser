@@ -11,9 +11,9 @@ namespace Slang.Parser.Sdf
     /// <summary>
     /// Builds parse trees using ATerms.
     /// </summary>
-    public sealed class ATermParseTreeBuilder : IParseTreeBuilder<object, ITerm>
+    public sealed class ATermParseTreeBuilder : IParseTreeBuilder<Token<CodePoint>, ITerm>
     {
-        public ITerm BuildToken(Token<object> token)
+        public ITerm BuildToken(Token<CodePoint> token)
         {
             throw new NotImplementedException();
         }

@@ -11,7 +11,9 @@ namespace Slang.Parsing
     /// A parse table.
     /// </summary>
     /// <typeparam name="TState">The type of states.</typeparam>
-    public interface IParseTable<TState>
+    /// <typeparam name="TToken">The type of tokens.</typeparam>
+    public interface IParseTable<TState, TToken>
+        where TToken : IToken
     {
         /// <summary>
         /// Gets the start state of the parser.
@@ -24,7 +26,7 @@ namespace Slang.Parsing
         /// and the next states to go to after shifting.
         /// </summary>
         /// <param name="state">The current state.</param>
-        /// <param name="token">The token type to shift.</param>
+        /// <param name="token">The token to shift.</param>
         /// <returns>A non-empty set of states if the shift is possible;
         /// otherwise, an empty set of states if the shift is not possible.</returns>
         /// <remarks>
@@ -33,7 +35,7 @@ namespace Slang.Parsing
         /// parse tables may have more than one state after a shift. This does not
         /// necessarily have to be supported by the parser, as they can be eliminated.
         /// </remarks>
-        IEnumerable<TState> GetShifts(TState state, ITokenType token);
+        IEnumerable<TState> GetShifts(TState state, TToken token);
 
         /// <summary>
         /// Gets the next states to go to after reducing.
@@ -56,13 +58,13 @@ namespace Slang.Parsing
         /// with the specified lookahead token type.
         /// </summary>
         /// <param name="state">The current state.</param>
-        /// <param name="lookahead">The lookahead token type.</param>
+        /// <param name="lookahead">The lookahead token.</param>
         /// <returns>A non-empty set of reductions if a reduction is possible;
         /// otherwise, an empty set of reductions if no reductions are possible.</returns>
         /// <remarks>
         /// When this method returns more than one reduction, the state has a reduce/reduce
         /// conflict. Generalized parsers will support this.
         /// </remarks>
-        IEnumerable<IReduction> GetReductions(TState state, ITokenType lookahead);
+        IEnumerable<IReduction> GetReductions(TState state, TToken lookahead);
     }
 }

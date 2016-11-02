@@ -16,14 +16,14 @@ namespace Slang.Parser
         /// Gets the token.
         /// </summary>
         /// <value>The token.</value>
-        public Token<T> Token { get; }
+        public TypedToken<T> Token { get; }
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ParseTreeToken{T}"/> class.
         /// </summary>
         /// <param name="token">The token.</param>
-        public ParseTreeToken(Token<T> token)
+        public ParseTreeToken(TypedToken<T> token)
         {
             this.Token = token;
         }
