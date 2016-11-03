@@ -48,7 +48,7 @@ namespace Slang.Parser.Sdf
             var parser = new SlangParser<SdfStateRef, Token<CodePoint>, IParseNode>(parseTable, parseTreeBuilder, errorHandler);
 
             // Act
-            string input = "entity X {}";
+            string input = "module Test entity X {}";
             var result = parser.Parse(new CharacterProvider(new StringReader(input)));
 
             // Assert

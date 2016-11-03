@@ -118,6 +118,13 @@ namespace Slang.Parser.Sdf
                     {
                         shifts.Set(new SdfStateRef(i), (CodePointSet)characters, (SdfStateRef)nextState);
                     }
+
+                    var eofGoto = (from g in state.Gotos where g.Characters.Contains(CodePoint.Eof) select g).SingleOrDefault();
+                    if (eofGoto != null)
+                    {
+                        Debug.Assert(actionSet.Items.Any(a => a is AcceptActionItem));
+                        shifts.Set(new SdfStateRef(i), (CodePointSet)eofGoto.Characters, (SdfStateRef)eofGoto.NextState);
+                    }
                 }
             }
 
