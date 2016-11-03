@@ -12,9 +12,11 @@ namespace Slang.Parser
     /// A link between two stack frames on the Graph-Structured Stack.
     /// </summary>
     /// <remarks>
-    /// Two links are considered to be equal if their parent frame
+    /// <para>Two links are considered to be equal if their parent frame
     /// and symbol are equal. The trees are not used in the equality
-    /// check.
+    /// check.</para>
+    /// <para>A link may exist between state frames in the same phase.
+    /// These are produced by empty productions.</para>
     /// </remarks>
     public sealed class FrameLink<TState>
     {

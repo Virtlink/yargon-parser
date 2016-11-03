@@ -75,7 +75,8 @@ namespace Slang.Parser
         /// </summary>
         /// <param name="state">The state of the frame to which to add the link.</param>
         /// <param name="link">The link to add.</param>
-        /// <returns>The frame to which the link was added.</returns>
+        /// <returns>The frame to which the link was added; or <see langword="null"/> if an existing link was re-used.</returns>
+        [CanBeNull]
         public Tuple<Frame<TState>, FrameLink<TState>> AddLinkToTopFrame(TState state, FrameLink<TState> link)
         {
             #region Contract
@@ -83,9 +84,8 @@ namespace Slang.Parser
                 throw new ArgumentNullException(nameof(state));
             if (link == null)
                 throw new ArgumentNullException(nameof(link));
-            if (link.Parent.Phase >= this.Height)
-                throw new ArgumentException("The linked parent frame is not a frame before the current stack tops.",
-                    nameof(link));
+            if (link.Parent.Phase > this.Height)
+                throw new ArgumentException("The linked parent frame is not a frame at or before the current stack tops.", nameof(link));
             #endregion
 
             Frame<TState> frame;
@@ -94,8 +94,11 @@ namespace Slang.Parser
                 frame = new Frame<TState>(state, this.Height);
                 this.tops.Add(state, frame);
             }
-            var newLink = frame.AddLink(link);
-            return Tuple.Create(frame, newLink);
+            FrameLink<TState> actualLink;
+            if (frame.AddLink(link, out actualLink))
+                return Tuple.Create(frame, actualLink);
+            else
+                return null;
         }
 
         /// <summary>
@@ -124,6 +127,7 @@ namespace Slang.Parser
                 frame = new Frame<TState>(state, this.Height + 1);
                 this.workspace.Add(state, frame);
             }
+            
             frame.AddLink(link);
             return frame;
         }

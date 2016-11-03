@@ -33,7 +33,7 @@ namespace Slang.Parser.Sdf
             #endregion
 
             this.reader = reader;
-            this.currentLocation = new SourceLocation(0, 0, 0);
+            this.currentLocation = new SourceLocation(0, 1, 1);
         }
         #endregion
 

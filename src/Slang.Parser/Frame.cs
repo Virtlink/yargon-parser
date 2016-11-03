@@ -79,11 +79,23 @@ namespace Slang.Parser
         }
         #endregion
 
+
         /// <summary>
         /// Adds a link.
         /// </summary>
-        /// <returns>The link that's added to the frame.</returns>
-        public FrameLink<TState> AddLink(FrameLink<TState> link)
+        public void AddLink(FrameLink<TState> link)
+        {
+            FrameLink<TState> actualLink;
+            AddLink(link, out actualLink);
+        }
+
+        /// <summary>
+        /// Adds a link.
+        /// </summary>
+        /// <param name="actualLink">The link that was actually put on the stacks.</param>
+        /// <returns><see langword="true"/> when <paramref name="actualLink"/> is a newly added link;
+        /// otherwise, <see langword="false"/> when <paramref name="actualLink"/> is an existing link..</returns>
+        public bool AddLink(FrameLink<TState> link, out FrameLink<TState> actualLink)
         {
             #region Contract
             if (link == null)
@@ -95,13 +107,15 @@ namespace Slang.Parser
             {
                 // Merge the new link with the existing link.
                 existingLink.MergeWith(link);
-                return existingLink;
+                actualLink = existingLink;
+                return false;
             }
             else
             {
                 // Add a new link.
                 this.links.Add(link);
-                return link;
+                actualLink = link;
+                return true;
             }
         }
 

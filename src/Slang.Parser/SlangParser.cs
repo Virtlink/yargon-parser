@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Slang.Parsing;
+using Virtlink.Utilib.Collections;
 
 namespace Slang.Parser
 {
@@ -163,15 +164,16 @@ namespace Slang.Parser
                         int arity = reduction.Arity;
                         // Find all unique paths of length `arity`
                         // that end at `endFrame` and include `endLink`.
+                        // Note that `arity` may be 0, in which case `endLink` is ignored.
                         var paths = this.Stacks.GetPaths(arity, endFrame, endLink);
 
                         foreach (var path in paths)
                         {
-                            var newFrameAndLink = Reduce(reduction, path);
-                            reductionCount += 1;
+                            var newFramesAndLinks = Reduce(reduction, path).ToList();
+                            reductionCount += newFramesAndLinks.Count;
 
                             // We have to try and reduce the new stack as well.
-                            worklist.Enqueue(newFrameAndLink);
+                            worklist.EnqueueRange(newFramesAndLinks);
                         }
                     }
                 }
@@ -185,7 +187,7 @@ namespace Slang.Parser
             /// <param name="reduction">The reduction to apply.</param>
             /// <param name="path">The path to apply the reduction to.</param>
             /// <returns>The frame and frame link resulting from the reduction.</returns>
-            private Tuple<Frame<TState>, FrameLink<TState>> Reduce(IReduction reduction, StackPath<TState> path)
+            private IEnumerable<Tuple<Frame<TState>, FrameLink<TState>>> Reduce(IReduction reduction, StackPath<TState> path)
             {
                 #region Contract
                 Debug.Assert(reduction != null);
@@ -197,15 +199,20 @@ namespace Slang.Parser
                 // This will introduce a new link to a new or existing frame.
                 var baseFrame = path.Frame; // The top frame after reduction.
                 var nextStates = this.parser.ParseTable.GetGotos(baseFrame.State, reduction.Symbol);
-                var nextState = nextStates.Single();
+                foreach (var nextState in nextStates)
+                {
+                    Debug.Assert(nextState != null);
 
-                // TODO: We could check the right-hand symbols of the reduction using path.GetSymbols().
-                // Since I've proven that these should always match, a mismatch would indicate an error
-                // in the built parse table. Therefore this should be a Debug.Assert().
-                var arguments = path.GetParseTrees(this.parser.parseTreeBuilder);
-                var tree = this.parser.parseTreeBuilder.BuildProduction(reduction, arguments);
-                var newLink = new FrameLink<TState>(baseFrame, reduction.Symbol, reduction.Rejects, tree);
-                return this.Stacks.AddLinkToTopFrame(nextState, newLink);
+                    // TODO: We could check the right-hand symbols of the reduction using path.GetSymbols().
+                    // Since I've proven that these should always match, a mismatch would indicate an error
+                    // in the built parse table. Therefore this should be a Debug.Assert().
+                    var arguments = path.GetParseTrees(this.parser.parseTreeBuilder);
+                    var tree = this.parser.parseTreeBuilder.BuildProduction(reduction, arguments);
+                    var newLink = new FrameLink<TState>(baseFrame, reduction.Symbol, reduction.Rejects, tree);
+                    var frameAndLink = this.Stacks.AddLinkToTopFrame(nextState, newLink);
+                    if (frameAndLink != null)
+                        yield return frameAndLink;
+                }
             }
 
             /// <inheritdoc />

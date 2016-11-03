@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using NUnit.Framework;
 using System.Reflection;
+using Slang.Parser.Sdf.ParseTrees;
 using Slang.Parser.Sdf.Productions.IO;
 using Slang.Parsing;
 using Virtlink.ATerms;
@@ -41,12 +43,20 @@ namespace Slang.Parser.Sdf
             var productionFormat = new TermProductionFormat(termFactory);
             var reader = new SdfParseTableReader(productionFormat);
             var parseTable = reader.Read(new StreamReader(stream));            
-            var parseTreeBuilder = new ATermParseTreeBuilder();
+            var parseTreeBuilder = new TrivialParseNodeFactory();
             var errorHandler = new FailingErrorHandler<SdfStateRef, Token<CodePoint>>();
-            var parser = new SlangParser<SdfStateRef, Token<CodePoint>, ITerm>(parseTable, parseTreeBuilder, errorHandler);
+            var parser = new SlangParser<SdfStateRef, Token<CodePoint>, IParseNode>(parseTable, parseTreeBuilder, errorHandler);
 
             // Act
-//            parser.Parse()
+            string input = "entity X {}";
+            var result = parser.Parse(new CharacterProvider(new StringReader(input)));
+
+            // Assert
+            Assert.That(result.Success, Is.True);
+            Assert.That(result.Tree, Is.Null);
+
+            // Cleanup
+            stream.Dispose();
         }
-	}
+    }
 }
