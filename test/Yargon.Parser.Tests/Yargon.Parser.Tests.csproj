@@ -70,9 +70,6 @@
     <Compile Include="ParseTreeToken.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Yargon.Parser\Yargon.Parser.csproj">
       <Project>{49501580-aab0-40a8-a37d-a494c9462887}</Project>
       <Name>Yargon.Parser</Name>
@@ -81,6 +78,9 @@
       <Project>{7caf54e1-004d-4d95-8e45-3e01eb506151}</Project>
       <Name>Yargon.Parsing</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

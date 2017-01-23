@@ -62,7 +62,6 @@
     <Compile Include="SdfParseTableReaderTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <EmbeddedResource Include="Parsetable1.tbl" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +77,9 @@
       <Project>{7caf54e1-004d-4d95-8e45-3e01eb506151}</Project>
       <Name>Yargon.Parsing</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
