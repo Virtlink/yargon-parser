@@ -1,4 +1,4 @@
-[![AppVeyor](https://img.shields.io/appveyor/ci/Cyberlect/yargon-parser.svg)](https://ci.appveyor.com/project/Cyberlect/yargon-parser)
+[![AppVeyor](https://img.shields.io/appveyor/ci/Virtlink/yargon-parser.svg)](https://ci.appveyor.com/project/Virtlink/yargon-parser)
 [![GitHub release](https://img.shields.io/github/release/Cyberlect/yargon-parser.svg)](https://github.com/Cyberlect/yargon-parser/releases)
 [![GitHub license](https://img.shields.io/github/license/Cyberlect/yargon-parser.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Maintenance](https://img.shields.io/maintenance/yes/2017.svg)](https://github.com/Cyberlect/yargon-parser/commits/master)
