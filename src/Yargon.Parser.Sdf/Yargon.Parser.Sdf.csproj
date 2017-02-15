@@ -58,7 +58,7 @@
     <Compile Include="Interval.cs" />
     <Compile Include="JetBrains.Annotations.cs" />
     <Compile Include="OrderedRangedSet.cs" />
-    <Compile Include="ParseTrees\AsfixImploder.cs" />
+    <Compile Include="ParseTrees\AsFixImploder.cs" />
     <Compile Include="ParseTrees\AsFixTreeBuilder.cs" />
     <Compile Include="ParseTrees\IAmbiguityParseNode.cs" />
     <Compile Include="ParseTrees\IApplicationParseNode.cs" />

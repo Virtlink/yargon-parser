@@ -12,16 +12,16 @@ namespace Yargon.Parser.Sdf.ParseTrees
     /// <summary>
     /// A parse tree imploder.
     /// </summary>
-    public sealed class AsfixImploder : IParseNodeVisitor<ITerm>
+    public sealed class AsFixImploder : IParseNodeVisitor<ITerm>
     {
         private readonly TermFactory factory;
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="AsfixImploder"/> class.
+        /// Initializes a new instance of the <see cref="AsFixImploder"/> class.
         /// </summary>
         /// <param name="factory">The term factory to use.</param>
-        public AsfixImploder(TermFactory factory)
+        public AsFixImploder(TermFactory factory)
         {
             #region Contract
             if (factory == null)
@@ -55,8 +55,8 @@ namespace Yargon.Parser.Sdf.ParseTrees
                 throw new ArgumentNullException(nameof(node));
             #endregion
 
-            
-            throw new NotImplementedException();
+            var children = node.Children.Select(c => c.Accept(this)).ToArray();
+            return this.factory.Cons(node.Production.Constructor, children);
         }
 
         /// <inheritdoc />
