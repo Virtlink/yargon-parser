@@ -1,0 +1,8 @@
+﻿definition
+module Example1
+exports
+  lexical start-symbols
+    Start
+
+  lexical syntax
+    "keyword" -> Start {cons("Keyword")}

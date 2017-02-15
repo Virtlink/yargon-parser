@@ -1,0 +1,9 @@
+﻿module Example2
+
+context-free start-symbols
+  
+  Start
+
+context-free syntax
+
+  Start.Keyword = "keyword"

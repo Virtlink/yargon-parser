@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Yargon.Parsing;
 using Virtlink.Utilib.Collections;
+using Virtlink.Utilib.Diagnostics;
 
 namespace Yargon.Parser.Sdf
 {
@@ -16,7 +16,8 @@ namespace Yargon.Parser.Sdf
         /// </summary>
         public sealed class GotoCollection
         {
-            private readonly List<Dictionary<ISort, ListSet<SdfStateRef>>> gotos = new List<Dictionary<ISort, ListSet<SdfStateRef>>>();
+            private readonly List<Dictionary<ISort, ListSet<SdfStateRef>>> gotos =
+                new List<Dictionary<ISort, ListSet<SdfStateRef>>>();
 
             #region Constructors
             /// <summary>

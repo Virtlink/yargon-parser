@@ -1,0 +1,7 @@
+﻿module Example1
+
+lexical start-symbols
+	Start
+
+lexical syntax  
+  Start.Keyword = "keyword"

@@ -1,0 +1,8 @@
+﻿definition
+module Example2
+exports
+  context-free start-symbols
+    Start
+
+  context-free syntax
+    "keyword" -> Start {cons("Keyword")}
