@@ -51,12 +51,12 @@
       <HintPath>..\..\packages\Virtlink.ATerms.1.1.0\lib\net45\Virtlink.ATerms.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Virtlink.Utilib, Version=1.17.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Virtlink.Utilib.1.17.2\lib\net45\Virtlink.Utilib.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Virtlink.Utilib, Version=1.18.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Virtlink.Utilib.1.18.0\lib\net45\Virtlink.Utilib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Example3.cs" />
     <Compile Include="Example2.cs" />
     <Compile Include="OrderedRangedSetTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Example2.tbl" />
+    <EmbeddedResource Include="Example3.tbl" />
     <None Include="Example2.def" />
     <None Include="Example2.sdf3" />
     <None Include="packages.config" />

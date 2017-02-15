@@ -148,7 +148,7 @@ namespace Yargon.Parser
                 // Get all the stack to try to reduce.
                 var worklist = new Queue<Tuple<Frame<TState>, FrameLink<TState>>>(
                     from f in this.Stacks.Tops
-                    from l in f.Links
+                    from l in f.Links.OrIfEmpty(new FrameLink<TState>[] { null })
                     select Tuple.Create(f, l));
 
                 int reductionCount = 0;

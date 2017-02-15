@@ -198,7 +198,7 @@ namespace Yargon.Parser
         /// <summary>
         /// Gets all paths with the specified length from the stack tops.
         /// </summary>
-        /// <param name="length">The length of the path to find.</param>
+        /// <param name="length">The length of the path to find, which may be 0.</param>
         /// <param name="topFrame">The top frame of the path to find; or <see langword="null"/> to find paths with any top frame.</param>
         /// <param name="topLink">The top frame link of the path to find; or <see langword="null"/> to find path with any top link.</param>
         /// <returns>An enumerable sequence of paths.</returns>

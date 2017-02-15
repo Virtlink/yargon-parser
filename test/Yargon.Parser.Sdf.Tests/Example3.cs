@@ -12,9 +12,9 @@ using Virtlink.ATerms.IO;
 namespace Yargon.Parser.Sdf
 {
 	[TestFixture]
-	public class Example2
+	public class Example3
 	{
-	    private const string Name = "Example2";
+	    private const string Name = "Example3";
 
         [Test]
 		public void ReadParseTableFromFile()

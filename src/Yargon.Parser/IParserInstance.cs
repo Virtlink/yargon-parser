@@ -40,7 +40,7 @@ namespace Yargon.Parser
         /// <remarks>
         /// This method attempts to reduce each currently active stack.
         /// When this method returns <see langword="true"/>, the reduced stacks have been
-        /// added to the set of active stacks. Whe this method returns <see langword="false"/>,
+        /// added to the set of active stacks. When this method returns <see langword="false"/>,
         /// the stacks are unchanged. The new stack top states have links to some earlier
         /// state, labelled with the sort of the reduction.
         /// </remarks>
