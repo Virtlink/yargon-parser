@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using Yargon.Parser.Sdf.Productions.IO;
-using Virtlink.ATerms;
+using Yargon.ATerms;
 
 namespace Yargon.Parser.Sdf.ParseTrees
 {
@@ -27,9 +27,12 @@ namespace Yargon.Parser.Sdf.ParseTrees
 		public AsFixTreeBuilder(TermFactory factory, IProductionFormat<ITerm> productionFormat)
 		{
 			#region Contract
-			Contract.Requires<ArgumentNullException>(factory != null);
-			Contract.Requires<ArgumentNullException>(productionFormat != null);
+            if (factory == null)
+                throw new ArgumentNullException(nameof(factory));
+		    if (productionFormat == null)
+		        throw new ArgumentNullException(nameof(productionFormat));
 			#endregion
+
 			this.factory = factory;
 			this.productionFormat = productionFormat;
 		}
@@ -38,16 +41,24 @@ namespace Yargon.Parser.Sdf.ParseTrees
 		/// <inheritdoc />
 		public ITerm Transform(IParseNode root)
 		{
-			// CONTRACT: Inherited from IParseTreeBuilder<T>
-			int ambiguityCount = 0;	// TODO
+		    #region Contract
+		    if (root == null)
+		        throw new ArgumentNullException(nameof(root));
+		    #endregion
+
+            int ambiguityCount = 0;	// TODO
 			return factory.Cons("parsetree", root.Accept(this), factory.Int(ambiguityCount));
 		}
 
 		/// <inheritdoc />
 		ITerm IParseNodeVisitor<ITerm>.VisitApplication(IApplicationParseNode node)
 		{
-			// CONTRACT: Inherited from IParseNodeVisitor
-			var children = from c in node.Children select c.Accept(this);
+		    #region Contract
+		    if (node == null)
+		        throw new ArgumentNullException(nameof(node));
+		    #endregion
+
+		    var children = from c in node.Children select c.Accept(this);
 			var productionTerm = this.productionFormat.Write(node.Production);
 			return factory.Cons("appl", productionTerm, factory.List(children));
 		}
@@ -55,9 +66,12 @@ namespace Yargon.Parser.Sdf.ParseTrees
 		/// <inheritdoc />
 		ITerm IParseNodeVisitor<ITerm>.VisitAmbiguity(IAmbiguityParseNode node)
 		{
-			// CONTRACT: Inherited from IParseNodeVisitor
-			
-			var alternatives = from c in node.Children select c.Accept(this);
+		    #region Contract
+		    if (node == null)
+		        throw new ArgumentNullException(nameof(node));
+		    #endregion
+
+		    var alternatives = from c in node.Children select c.Accept(this);
 			// TODO: Flatten nested ambiguities. For example:
 			// amb(amb("x", "y"), "z") should become amb("x", "y", "z").
 			return factory.Cons("amb", factory.List(alternatives));
@@ -66,22 +80,34 @@ namespace Yargon.Parser.Sdf.ParseTrees
 		/// <inheritdoc />
 		ITerm IParseNodeVisitor<ITerm>.VisitProduction(IProductionParseNode node)
 		{
-			// CONTRACT: Inherited from IParseNodeVisitor
-			return factory.Int(unchecked((int)node.Token.Value));
+		    #region Contract
+		    if (node == null)
+		        throw new ArgumentNullException(nameof(node));
+		    #endregion
+
+		    return factory.Int(unchecked((int)node.Token.Value));
 		}
 
 		/// <inheritdoc />
 		ITerm IParseNodeVisitor<ITerm>.VisitParseNode(IParseNode node)
 		{
-			// CONTRACT: Inherited from IParseNodeVisitor
-			throw new NotSupportedException("Unknown parse node type.");
+		    #region Contract
+		    if (node == null)
+		        throw new ArgumentNullException(nameof(node));
+		    #endregion
+
+		    throw new NotSupportedException("Unknown parse node type.");
 		}
 
 		/// <inheritdoc />
 		ITerm IParseNodeVisitor<ITerm>.VisitCycle(ICycleParseNode node)
 		{
-			// CONTRACT: Inherited from IParseNodeVisitor
-			throw new NotImplementedException();
+		    #region Contract
+		    if (node == null)
+		        throw new ArgumentNullException(nameof(node));
+		    #endregion
+
+		    throw new NotImplementedException();
 		}
 	}
 }

@@ -7,8 +7,8 @@ using JetBrains.Annotations;
 using Yargon.Parser.Sdf.Productions;
 using Yargon.Parser.Sdf.Productions.IO;
 using Yargon.Parsing;
-using Virtlink.ATerms;
-using Virtlink.ATerms.IO;
+using Yargon.ATerms;
+using Yargon.ATerms.IO;
 using Virtlink.Utilib.Collections;
 
 namespace Yargon.Parser.Sdf

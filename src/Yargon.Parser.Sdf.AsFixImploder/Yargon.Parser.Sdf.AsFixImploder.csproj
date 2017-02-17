@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Virtlink.Utilib" Version="1.18.0" />
+    <PackageReference Include="Yargon.ATerms" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Yargon.Tego\Yargon.Tego.csproj" />
+  </ItemGroup>
+
+</Project>

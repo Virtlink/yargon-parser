@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yargon.Parser.Sdf.Productions.IO;
-using Virtlink.ATerms;
+using Yargon.ATerms;
 
 namespace Yargon.Parser.Sdf.ParseTrees
 {
     /// <summary>
     /// A parse tree imploder.
     /// </summary>
-    public sealed class AsFixImploder : IParseNodeVisitor<ITerm>
+    public sealed class AsFixImploder
     {
         private readonly TermFactory factory;
 
@@ -35,71 +35,15 @@ namespace Yargon.Parser.Sdf.ParseTrees
         /// <summary>
         /// Implodes the specified parse tree.
         /// </summary>
-        /// <param name="parseTree">The parse tree to implode.</param>
+        /// <param name="asfixTree">The AsFix parse tree to implode.</param>
         /// <returns>The resulting AST.</returns>
-        public ITerm Implode(IParseNode parseTree)
+        public ITerm Implode(ITerm asfixTree)
         {
             #region Contract
-            if (parseTree == null)
-                throw new ArgumentNullException(nameof(parseTree));
+            if (asfixTree == null)
+                throw new ArgumentNullException(nameof(asfixTree));
             #endregion
-
-            return parseTree.Accept(this);
-        }
-
-        /// <inheritdoc />
-		ITerm IParseNodeVisitor<ITerm>.VisitApplication(IApplicationParseNode node)
-        {
-            #region Contract
-            if (node == null)
-                throw new ArgumentNullException(nameof(node));
-            #endregion
-
-            var children = node.Children.Select(c => c.Accept(this)).ToArray();
-            return this.factory.Cons(node.Production.Constructor, children);
-        }
-
-        /// <inheritdoc />
-        ITerm IParseNodeVisitor<ITerm>.VisitAmbiguity(IAmbiguityParseNode node)
-        {
-            #region Contract
-            if (node == null)
-                throw new ArgumentNullException(nameof(node));
-            #endregion
-
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        ITerm IParseNodeVisitor<ITerm>.VisitProduction(IProductionParseNode node)
-        {
-            #region Contract
-            if (node == null)
-                throw new ArgumentNullException(nameof(node));
-            #endregion
-
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        ITerm IParseNodeVisitor<ITerm>.VisitParseNode(IParseNode node)
-        {
-            #region Contract
-            if (node == null)
-                throw new ArgumentNullException(nameof(node));
-            #endregion
-
-            throw new NotSupportedException("Unknown parse node type.");
-        }
-
-        /// <inheritdoc />
-        ITerm IParseNodeVisitor<ITerm>.VisitCycle(ICycleParseNode node)
-        {
-            #region Contract
-            if (node == null)
-                throw new ArgumentNullException(nameof(node));
-            #endregion
-
+            
             throw new NotImplementedException();
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using Virtlink.ATerms;
+using Yargon.ATerms;
 
 namespace Yargon.Parser.Sdf.Productions.IO
 {

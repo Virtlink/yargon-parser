@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using Yargon.Parsing;
-using Virtlink.ATerms;
+using Yargon.ATerms;
 using Virtlink.Utilib.Collections;
 
 namespace Yargon.Parser.Sdf.Productions.IO

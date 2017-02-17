@@ -2,36 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Yargon.Parsing;
-using Virtlink.ATerms;
 
 namespace Yargon.Parser.Sdf.ParseTrees
 {
 	/// <summary>
 	/// A trivial parse node factory.
 	/// </summary>
-	public sealed partial class TrivialParseNodeFactory : IParseTreeBuilder<Token<CodePoint>, IParseNode> // , IParseNodeFactory
+	public sealed partial class TrivialParseNodeFactory : IParseTreeBuilder<Token<CodePoint>, IParseNode>
     {
-//		/// <inheritdoc />
-//		public IAmbiguityParseNode CreateAmbiguity(IReadOnlyList<IParseNode> alternatives)
-//		{
-//			// CONTRACT: Inherited from IParseNodeFactory
-//			return new AmbiguityParseNode(alternatives);
-//		}
-//
-//		/// <inheritdoc />
-//		public IApplicationParseNode CreateApplication(Production production, ParseNodePreference preference, IReadOnlyList<IParseNode> children)
-//		{
-//			// CONTRACT: Inherited from IParseNodeFactory
-//			return new ApplicationParseNode(production, preference, children);
-//		}
-//
-//		/// <inheritdoc />
-//		public IProductionParseNode CreateProduction(CodePoint token)
-//		{
-//			// CONTRACT: Inherited from IParseNodeFactory
-//			return new ProductionParseNode(token);
-//		}
-
         /// <inheritdoc />
         public IParseNode BuildToken(Token<CodePoint> token)
         {
