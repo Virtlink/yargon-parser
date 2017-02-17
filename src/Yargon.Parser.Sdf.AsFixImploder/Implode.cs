@@ -10,9 +10,12 @@ namespace Yargon.Parser.Sdf.AsFixImploder
     /// </summary>
     public static class Implode
     {
-        public static ITerm ImplodeAsfix(this ITerm term) => ImplodeAsfix(term, true);
+        // https://github.com/metaborg/strategoxt/tree/master/strategoxt/stratego-libraries/sglr/lib/stratego/asfix
+        public static ITerm ImplodeAsfix(this ITerm term)
+            => term.ImplodeAsfix(true);
 
-        public static ITerm ImplodeAsfixSkipConcreteSyntax(this ITerm term) => ImplodeAsfix(term, false);
+        public static ITerm ImplodeAsfixSkipConcreteSyntax(this ITerm term)
+            => term.ImplodeAsfix(false);
 
         public static ITerm ImplodeAsfix(this ITerm term, bool implodeConcrete)
         {
