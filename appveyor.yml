@@ -1,7 +1,14 @@
 version: "#{build}"
-os: Visual Studio 2015
+image: Visual Studio 2017
 configuration: Release
 
 before_build:
-- del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"
-- nuget restore
+- ps: dotnet --info
+- ps: dotnet restore --verbosity detailed
+
+build:
+  verbosity: minimal
+
+test_script:
+- ps: dotnet test -c $env:CONFIGURATION ./test/Yargon.Parser.Tests/Yargon.Parser.Tests.csproj
+- ps: dotnet test -c $env:CONFIGURATION ./test/Yargon.Parser.Sdf.Tests/Yargon.Parser.Sdf.Tests.csproj
